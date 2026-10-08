@@ -18,12 +18,14 @@
   <link rel="stylesheet" href="/progress.css">
   <link rel="stylesheet" href="/workspace.css">
   <link rel="stylesheet" href="/plan.css">
+  <link rel="stylesheet" href="/evidence.css">
   <script src="/app.js" defer></script>
   <script src="/fixit.js" defer></script>
   <script src="/doctor.js" defer></script>
   <script src="/progress.js" defer></script>
   <script src="/workspace.js" defer></script>
   <script src="/plan.js" defer></script>
+  <script src="/evidence.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -173,6 +175,20 @@
               <ol id="plan-week-list" class="week-list"></ol>
             </section>
           </div>
+          <section id="repo-evidence" class="repo-evidence" aria-labelledby="repo-evidence-title">
+            <span class="eyebrow">OPTIONAL · READ-ONLY INSPECTION</span>
+            <h3 id="repo-evidence-title">Repository Evidence Intelligence</h3>
+            <p>Inspect filenames in the repository selected below in Portfolio Workshop. Look for test, CI, deployment and documentation signals. No files are executed and this does not affect your portfolio score.</p>
+            <div class="evidence-tools"><button id="evidence-inspect" type="button" disabled>⌕ Inspect selected repository paths</button></div>
+            <p id="evidence-status" role="status" aria-live="polite">Run an audit to enable file-path inspection.</p>
+            <div id="evidence-results" hidden>
+              <p id="evidence-summary"></p>
+              <ul id="evidence-findings" class="evidence-findings"></ul>
+              <div class="evidence-tools"><label for="evidence-role">Your target role</label><select id="evidence-role"><option value="">Choose a target role</option></select></div>
+              <div id="evidence-role-result" aria-live="polite"></div>
+              <p id="evidence-limitation"></p>
+            </div>
+          </section>
           <div id="improve-workspace" class="improve-workspace">
             <div class="improve-workspace-head">
               <div><span class="eyebrow">PORTFOLIO WORKSHOP</span><h3>Inspect, then improve.</h3><p>Check the README and create editable writing suggestions for the same project.</p></div>

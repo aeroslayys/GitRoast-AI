@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { collectProfile, scoreProfile, aiFeedback, validUsername, ApiError } from './engine.js';
 import { generateFixes } from './fixit.js';
 import { inspectPublicReadme } from './readme-doctor.js';
+import { inspectRepositoryEvidence } from './repo-evidence.js';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const cache = new Map();
@@ -13,6 +14,8 @@ const requests = new Map();
 const fixCache = new Map();
 const doctorCache = new Map();
 const doctorRequests = new Map();
+const evidenceRequests = new Map();
+const evidenceCache = new Map();
 const progressRequests = new Map();
 const fixRequests = new Map();
 const TTL = 10 * 60 * 1000;
@@ -34,7 +37,9 @@ const pages = {
   '/workspace.js': ['workspace.js', 'text/javascript; charset=utf-8'],
   '/workspace.css': ['workspace.css', 'text/css; charset=utf-8'],
   '/plan.css': ['plan.css', 'text/css; charset=utf-8'],
-  '/plan.js': ['plan.js', 'text/javascript; charset=utf-8']
+  '/plan.js': ['plan.js', 'text/javascript; charset=utf-8'],
+  '/evidence.js': ['evidence.js', 'text/javascript; charset=utf-8'],
+  '/evidence.css': ['evidence.css', 'text/css; charset=utf-8']
 };
 function json(res, code, obj) {
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
@@ -97,6 +102,34 @@ export async function handle(req, res) {
       const status=error instanceof ApiError?error.status:500;
       console.warn('Progress recheck failed:',error.message);
       return json(res,status,{error:status===500?'Could not refresh profile metrics right now.':error.message});
+    }
+  }
+  if (url.pathname === '/api/repo-evidence') {
+    const username=(url.searchParams.get('username')||'').trim();
+    const repository=url.searchParams.get('repo')||'';
+    if(!validUsername(username)||!/^[A-Za-z0-9_.-]{1,100}$/.test(repository)||
+      repository==='.'||repository==='..')
+      return json(res,400,{error:'Choose a valid public GitHub repository.'});
+    const ip=requestIdentity(req),now=Date.now();
+    if(evidenceRequests.size>1000)for(const [k,v]of evidenceRequests)if(v.until<now)evidenceRequests.delete(k);
+    const used=evidenceRequests.get(ip);
+    if(!used||used.until<now)evidenceRequests.set(ip,{count:1,until:now+3600000});
+    else if(++used.count>12)return json(res,429,{error:'Repository inspection limit reached. Please retry later.'});
+    const key=username.toLowerCase()+'/'+repository.toLowerCase();
+    const cached=evidenceCache.get(key);
+    if(cached&&cached.expires>now){try{return json(res,200,await cached.promise);}catch{evidenceCache.delete(key);}}
+    if(evidenceCache.size>=200){
+      for(const [k,v]of evidenceCache)if(v.expires<now)evidenceCache.delete(k);
+      if(evidenceCache.size>=200)evidenceCache.delete(evidenceCache.keys().next().value);
+    }
+    const promise=inspectRepositoryEvidence(username,repository);
+    evidenceCache.set(key,{promise,expires:now+TTL});
+    try{return json(res,200,await promise);}
+    catch(error){
+      evidenceCache.delete(key);
+      const status=error instanceof ApiError?error.status:500;
+      console.warn('Repository evidence unavailable:',error.message);
+      return json(res,status,{error:status===500?'Unable to inspect this repository right now.':error.message});
     }
   }
   if (url.pathname === '/api/readme-doctor') {

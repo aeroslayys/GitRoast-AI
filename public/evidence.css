@@ -1,0 +1,22 @@
+/* Optional repository evidence: compact Vista Aero styling. */
+.repo-evidence{margin-top:20px;padding:22px;background:linear-gradient(#f2fafc,#dfedf1);
+ border:1px solid #accbd7;border-radius:13px;box-shadow:inset 0 1px #fff;color:#30576c;}
+.repo-evidence h3{font-size:24px;margin:3px 0 7px;}
+.repo-evidence p{font-size:14px;line-height:1.5;color:#55778a;}
+.evidence-tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:14px 0;}
+.evidence-tools button,.evidence-tools select{font:700 14px "Segoe UI",Tahoma,sans-serif;
+ border-radius:9px;border:1px solid #92b7c8;padding:10px 14px;background:linear-gradient(#fff,#d0e5ec);color:#2e5d74;}
+.evidence-tools button:disabled{opacity:.55;cursor:not-allowed;}
+.evidence-findings{padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0;}
+.evidence-finding{padding:12px;border:1px solid #bed5dd;background:#fcffff;border-radius:9px;
+ display:flex;justify-content:space-between;align-items:start;gap:9px;min-width:0;}
+.evidence-finding strong,.evidence-finding small{display:block;}
+.evidence-finding small{color:#658392;margin-top:4px;}
+.evidence-finding p{overflow-wrap:anywhere;font-size:12px;margin:6px 0 0;}
+.evidence-source{font-size:12px;text-decoration:underline;white-space:nowrap;}
+.evidence-role-summary{font-weight:650;}
+.evidence-criteria{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:0;}
+.evidence-criteria li{background:#faffff;border:1px solid #c6d9e1;border-radius:8px;padding:9px;font-size:13px;}
+.evidence-criteria small{display:block;overflow-wrap:anywhere;color:#607e8d;margin-top:4px;}
+#evidence-status{min-height:21px;}
+@media(max-width:680px){.repo-evidence{padding:14px}.evidence-findings,.evidence-criteria{grid-template-columns:1fr;}}
