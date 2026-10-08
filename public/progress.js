@@ -71,15 +71,14 @@
     save.textContent=baseline?'◈ Replace baseline':'◈ Save today’s baseline';
     recheck.textContent=busy?'↻ Checking public GitHub…':'↻ Recheck GitHub now';
   };
-  const row=(title,left,right)=>{
+  const row=(title,left,right,delta=Number(right)-Number(left))=>{
     const box=node('div','progress-category-row');
     const label=node('span','progress-category-name',title);
     const before=node('span','progress-category-before',String(left));
     const arrow=node('span','progress-category-arrow','→');
     const after=node('span','progress-category-after',String(right));
-    const diff=Number(right)-Number(left);
-    const change=node('strong','progress-category-change',signed(diff));
-    change.dataset.trend=diff>0?'up':diff<0?'down':'neutral';
+    const change=node('strong','progress-category-change',signed(delta));
+    change.dataset.trend=delta>0?'up':delta<0?'down':'neutral';
     box.append(label,before,arrow,after,change);
     return box;
   };
@@ -111,12 +110,8 @@
     for(const item of baseline.categories){
       const next=map.get(item.name);
       if(!next || next.max!==item.max)continue;
-      categories.append(row(item.name,item.score+'/'+item.max,next.score+'/'+next.max));
-      // Text is formatted above; numeric deltas are calculated explicitly.
-      const visible=categories.lastElementChild;
-      const delta=next.score-item.score;
-      const badge=visible?.querySelector('.progress-category-change');
-      if(badge){badge.textContent=signed(delta);badge.dataset.trend=delta>0?'up':delta<0?'down':'neutral';}
+      categories.append(row(item.name,item.score+'/'+item.max,next.score+'/'+next.max,
+        next.score-item.score));
     }
     facts.replaceChildren();
     for(const [key,label] of FACTS){
