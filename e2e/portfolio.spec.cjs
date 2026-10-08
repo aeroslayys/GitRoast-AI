@@ -106,5 +106,14 @@ test('mobile: usable audit and keyboard-accessible tabs at 390px', async ({ page
     viewport: document.documentElement.clientWidth,
     page: document.documentElement.scrollWidth
   }));
+  if (sizes.page > sizes.viewport + 5) {
+    const overflowing = await page.evaluate(() => [...document.querySelectorAll('body *')]
+      .map(el => ({ tag: el.tagName, id: el.id, className: typeof el.className === 'string' ? el.className.slice(0,80) : '',
+        right: Math.round(el.getBoundingClientRect().right), left: Math.round(el.getBoundingClientRect().left),
+        width: Math.round(el.getBoundingClientRect().width) }))
+      .filter(e => e.right > innerWidth + 10 || e.left < -10)
+      .sort((a,b) => b.right-a.right).slice(0,24));
+    console.log('MOBILE OVERFLOW DIAGNOSTIC:', JSON.stringify(overflowing));
+  }
   expect(sizes.page).toBeLessThanOrEqual(sizes.viewport + 5);
 });
