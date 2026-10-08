@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 process.env.NODE_ENV = 'test';
-const { createApp } = await import('../server.js');
+const { createApp, requestIdentity } = await import('../server.js');
 
 test('serves health check, homepage, stylesheet and rejects malformed names', async () => {
   const server = createApp();
@@ -201,5 +201,41 @@ test('serves every local CSS and JavaScript declared by the homepage', async () 
     }
   } finally {
     await new Promise(resolve => server.close(resolve));
+  }
+});
+
+
+test('IP rate-limit identity ignores untrusted forwarded headers by default', () => {
+  const old = process.env.TRUSTED_PROXY_HOPS;
+  delete process.env.TRUSTED_PROXY_HOPS;
+  try {
+    assert.equal(requestIdentity({
+      socket: { remoteAddress: '169.254.169.126' },
+      headers: { 'x-forwarded-for': '198.51.100.1, 203.0.113.80' }
+    }), '169.254.169.126');
+  } finally {
+    if (old === undefined) delete process.env.TRUSTED_PROXY_HOPS;
+    else process.env.TRUSTED_PROXY_HOPS = old;
+  }
+});
+test('explicit trusted proxy count selects a trusted suffix, not a spoofed prefix', () => {
+  const old = process.env.TRUSTED_PROXY_HOPS;
+  process.env.TRUSTED_PROXY_HOPS = '2';
+  try {
+    assert.equal(requestIdentity({
+      socket: { remoteAddress: '169.254.169.126' },
+      headers: { 'x-forwarded-for': '192.0.2.7, 198.51.100.24, 203.0.113.80' }
+    }), '198.51.100.24');
+    assert.equal(requestIdentity({
+      socket: { remoteAddress: '169.254.169.126' },
+      headers: { 'x-forwarded-for': 'not-an-ip, 203.0.113.80' }
+    }), '169.254.169.126');
+    assert.equal(requestIdentity({
+      socket: { remoteAddress: '127.0.0.1' },
+      headers: { 'x-forwarded-for': '203.0.113.80' }
+    }), '127.0.0.1');
+  } finally {
+    if (old === undefined) delete process.env.TRUSTED_PROXY_HOPS;
+    else process.env.TRUSTED_PROXY_HOPS = old;
   }
 });

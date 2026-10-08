@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { isIP } from 'node:net';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -37,6 +38,20 @@ function json(res, code, obj) {
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
   res.end(JSON.stringify(obj));
 }
+// Honor forwarded IPs only when the deployment operator knows how many trusted
+// proxy hops appended addresses. Never trust the leftmost user-supplied XFF value.
+export function requestIdentity(req) {
+  const socketIP = req.socket?.remoteAddress || 'unknown';
+  const hops = Number(process.env.TRUSTED_PROXY_HOPS || 0);
+  if (!Number.isSafeInteger(hops) || hops < 1 || hops > 5) return socketIP;
+  const header = req.headers?.['x-forwarded-for'];
+  if (typeof header !== 'string' || header.length > 512) return socketIP;
+  const chain = header.split(',').map(part => part.trim());
+  if (chain.length < hops || chain.length > 20) return socketIP;
+  const candidate = chain[chain.length - hops];
+  return isIP(candidate) ? candidate : socketIP;
+}
+
 function tooMany(ip) {
   const now = Date.now();
   if (requests.size > 5000) for (const [key, value] of requests) if (value.until < now) requests.delete(key);
@@ -55,7 +70,7 @@ export async function handle(req, res) {
     const username=(url.searchParams.get('username')||'').trim();
     if (!validUsername(username)) return json(res,400,{error:'Enter a valid GitHub username.'});
     // A deliberate, uncached refresh of public metrics only. No Gemini request is made.
-    const ip=req.socket.remoteAddress||'unknown',now=Date.now();
+    const ip=requestIdentity(req),now=Date.now();
     if(progressRequests.size>1000)for(const [k,v] of progressRequests)if(v.until<=now)progressRequests.delete(k);
     const existing=progressRequests.get(ip);
     if(!existing||existing.until<=now)progressRequests.set(ip,{count:1,until:now+3600000});
@@ -87,7 +102,7 @@ export async function handle(req, res) {
     const repository=url.searchParams.get('repo')||'';
     if(!validUsername(username)||!/^[a-zA-Z0-9_.-]{1,100}$/.test(repository))
       return json(res,400,{error:'Choose a valid username and repository.'});
-    const ip=req.socket.remoteAddress||'unknown',now=Date.now();
+    const ip=requestIdentity(req),now=Date.now();
     if(doctorRequests.size>1500)for(const [k,v] of doctorRequests)if(v.until<=now)doctorRequests.delete(k);
     const previous=doctorRequests.get(ip);
     if(!previous||previous.until<=now)doctorRequests.set(ip,{count:1,until:now+3600000});
@@ -119,7 +134,7 @@ export async function handle(req, res) {
       return json(res, 400, { error: 'Choose a valid repository from the report.' });
     }
     // On-demand only; separate rate limit keeps Gemini costs under control.
-    const ip = req.socket.remoteAddress || 'unknown';
+    const ip = requestIdentity(req);
     const now = Date.now();
     const limit = fixRequests.get(ip);
     if (!limit || limit.until < now) fixRequests.set(ip, { count: 1, until: now + 3600000 });
@@ -146,7 +161,7 @@ export async function handle(req, res) {
   if (url.pathname === '/api/analyze') {
     const username = (url.searchParams.get('username') || '').trim();
     if (!validUsername(username)) return json(res, 400, { error: 'Enter a valid GitHub username.' });
-    if (tooMany(req.socket.remoteAddress || 'unknown')) return json(res, 429, { error: 'Too many reports from this connection. Please retry later.' });
+    if (tooMany(requestIdentity(req))) return json(res, 429, { error: 'Too many reports from this connection. Please retry later.' });
     const key = username.toLowerCase();
     const cached = cache.get(key);
     if (cached && cached.expires > Date.now()) {

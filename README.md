@@ -149,6 +149,7 @@ You can also create your own local `.env` file using `.env.example` as a guide, 
 | `GEMINI_BACKUP_MODEL` | No | Backup model used for eligible failures; default: `gemini-3.1-flash-lite` |
 | `GITHUB_TOKEN` | No | Raises GitHub API request limits; stored **only on the server** |
 | `PORT` | No | HTTP port; defaults to `8080` |
+| `TRUSTED_PROXY_HOPS` | No | Advanced: verified count of trusted proxy-added X-Forwarded-For entries for per-client throttling (off by default) |
 
 Model access and free-tier eligibility depend on your Google AI project. If a Gemini request fails, the app can fall back to **clearly labeled rules-based feedback or drafts**.
 
@@ -199,7 +200,7 @@ The [GitHub Actions workflow](.github/workflows/test.yml) runs the test suite on
 - **No predictive hiring claims.** Scores describe visible portfolio presentation, not ability or employability.
 - **README sampling is limited.** The main report queries up to 300 repositories and samples READMEs for up to eight featured projects. README Doctor checks selected public README text on demand rather than running or validating project code.
 - **Visible AI provenance.** Each report or writing draft identifies whether Gemini or deterministic rules produced it.
-- **Some limits apply.** GitHub API quotas, caching, temporary API failures, and server request limits can affect availability. Normal reports are cached for approximately 10 minutes; progress rechecks request fresh metrics.
+- **Some limits apply.** GitHub API quotas, caching, temporary API failures, and server request limits can affect availability. Normal reports are cached for approximately 10 minutes; progress rechecks request fresh metrics. In-process request throttles are per Cloud Run instance, **not distributed rate limits**. By default, the app uses the socket IP; Cloud Run may expose a shared proxy address. Set `TRUSTED_PROXY_HOPS` only after confirming your ingress appends that many trusted addresses to `X-Forwarded-For`, never based on arbitrary client headers. For production-wide abuse protection, use a trusted ingress with centralized rate limiting (such as Cloud Armor).
 - **Local-only progress.** Baselines and progress comparisons remain in the browser. They are not portable across devices unless manually copied.
 - **AI drafts require review.** Generated language can be inaccurate; bracketed placeholders signal missing evidence.
 
