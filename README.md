@@ -12,13 +12,15 @@
 4. **Gemini** writes a recruiter-style verdict, supportive feedback, and a playful, non-cruel roast. If no key is configured, the app provides accurate rules-based feedback and marks it as *data-based* rather than pretending AI was used.
 5. Users can switch between roast and kind modes, check off actionable fixes, copy a text summary, download a report, and share a profile URL like `?u=your-username`.
 6. **README Doctor** inspects the selected repository’s public README on demand and lists seven observable documentation signals with priority fixes. Unavailable README files are never labeled missing; no Gemini request is required.
-7. **Fix-It Studio** (on demand) drafts an editable GitHub bio, featured repository description, and README Markdown outline using public metadata. If Gemini is unavailable, suggestions are explicitly labeled rules-based templates. A `.md` download is provided.
+7. **Before & After Progress Tracker** lets students save a baseline in their own browser and run a fresh, Gemini-free recheck of public GitHub scoring signals. It compares the five score categories and observable repository metrics; saved baselines never sync to the server.
+8. **Fix-It Studio** (on demand) drafts an editable GitHub bio, featured repository description, and README Markdown outline using public metadata. If Gemini is unavailable, suggestions are explicitly labeled rules-based templates. A `.md` download is provided.
 
 ### Design principles
 
 - **Constructive, not cruel.** Comment on observable portfolio presentation, not personal worth.
 - **Evidence first.** Code quality, talent and employability cannot be measured from API metadata alone. The score is explicitly a heuristic, never a hiring prediction.
 - **Honest limitations.** Up to 300 repos are queried, archived/forked projects are excluded, and README checks are sampled. Unknown README results are not called missing.
+- **Progress is opt-in and local.** `GET /api/progress?username=...` recalculates public score signals without Gemini; at most six fresh rechecks per hour per IP. Baselines and comparisons live in browser localStorage, not Cloud Run or a database.
 - **No keys on the client.** Gemini and optional GitHub credentials live only in the Node.js backend.
 - **README Doctor is evidence-based.** It uses a separate, rate-limited GET endpoint, never runs project code or invents installation commands, and does not expose private repos even when an optional server token is connected.
 - **No GitHub writes.** Fix-It Studio only reads public data; review, edit and copy drafts manually. Generations are opt-in, cached for ten minutes, and limited to 12 attempts per connection per hour.

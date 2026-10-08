@@ -27,7 +27,9 @@ const pages = {
   '/fixit.js': ['fixit.js', 'text/javascript; charset=utf-8'],
   '/fixit.css': ['fixit.css', 'text/css; charset=utf-8'],
   '/doctor.js': ['doctor.js', 'text/javascript; charset=utf-8'],
-  '/doctor.css': ['doctor.css', 'text/css; charset=utf-8']
+  '/doctor.css': ['doctor.css', 'text/css; charset=utf-8'],
+  '/progress.js': ['progress.js', 'text/javascript; charset=utf-8'],
+  '/progress.css': ['progress.css', 'text/css; charset=utf-8']
 };
 function json(res, code, obj) {
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });

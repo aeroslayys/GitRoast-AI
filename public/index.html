@@ -15,9 +15,11 @@
   <link rel="stylesheet" href="/vista.css">
   <link rel="stylesheet" href="/fixit.css">
   <link rel="stylesheet" href="/doctor.css">
+  <link rel="stylesheet" href="/progress.css">
   <script src="/app.js" defer></script>
   <script src="/fixit.js" defer></script>
   <script src="/doctor.js" defer></script>
+  <script src="/progress.js" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -95,6 +97,7 @@
             <p id="report-subtitle">An honest snapshot of your portfolio.</p>
           </div>
           <div class="report-buttons">
+            <a class="progress-quicklink" href="#progress-tracker">↗ My Progress</a>
             <a class="doctor-quicklink" href="#readme-doctor">⌕ README Doctor</a>
             <a class="fixit-quicklink" href="#fixit-studio">✦ Open Fix-It Studio</a>
             <button type="button" id="share-report" class="outline-btn">↗ Share audit</button>
@@ -217,6 +220,61 @@
                 </article>
               </div>
               <p class="fixit-caution">Suggestions are drafts, not verified facts. Review them before adding them to your profile or repository. GitRoast never edits GitHub on your behalf.</p>
+            </div>
+          </div>
+        </section>
+        <section id="progress-tracker" class="progress-window" aria-labelledby="progress-title">
+          <div class="progress-titlebar">
+            <span class="progress-appicon" aria-hidden="true">↗</span>
+            <span>GitRoast / Progress Tracker</span>
+            <span class="progress-title-note">BEFORE &amp; AFTER</span>
+          </div>
+          <div class="progress-content">
+            <div class="progress-intro">
+              <div>
+                <div class="progress-eyebrow">09 / YOUR GITHUB GLOW-UP JOURNEY</div>
+                <h3 id="progress-title">Your progress, <span>in real numbers.</span></h3>
+                <p>Save today's baseline, improve your public GitHub profile, and recheck to see exactly which signals changed.</p>
+              </div>
+              <span class="progress-sticker">✓ GITHUB DATA · NO GEMINI CALLS</span>
+            </div>
+            <div class="progress-controls">
+              <button type="button" id="progress-save" disabled>◈ Save today's baseline</button>
+              <button type="button" id="progress-refresh" disabled>↻ Recheck GitHub now</button>
+              <button type="button" id="progress-clear" disabled>✕ Clear history</button>
+            </div>
+            <p class="progress-fineprint">Saved only in this browser for each GitHub username—not uploaded to our server. Rechecks bypass the 10-minute audit cache and use GitHub's public data without Gemini.</p>
+            <p id="progress-message" role="status" aria-live="polite" class="progress-message">Run a profile audit to unlock progress tracking.</p>
+            <div id="progress-results" class="progress-results" hidden>
+              <div class="progress-timeline">
+                <div class="progress-metric">
+                  <span>BEFORE · BASELINE</span>
+                  <strong id="progress-before-score">—<small> / 100</small></strong>
+                  <time id="progress-before-date">Not yet saved</time>
+                </div>
+                <div class="progress-delta-box">
+                  <span>CHANGE</span>
+                  <strong id="progress-delta" data-trend="neutral">—</strong>
+                  <small>Transparent profile score</small>
+                </div>
+                <div class="progress-metric">
+                  <span>AFTER · LAST FRESH CHECK</span>
+                  <strong id="progress-after-score">—<small> / 100</small></strong>
+                  <time id="progress-after-date">No fresh recheck yet</time>
+                </div>
+              </div>
+              <div id="progress-empty" class="progress-empty">Your baseline is saved. Make some changes on GitHub, then click Recheck GitHub now to compare.</div>
+              <div id="progress-comparison" hidden>
+                <div class="progress-section-heading"><h4>Which areas changed?</h4><span>Before → After</span></div>
+                <div id="progress-category-list" class="progress-category-list"></div>
+                <div class="progress-section-heading"><h4>What the data shows</h4><span>Observable public signals</span></div>
+                <div id="progress-facts" class="progress-facts"></div>
+                <p id="progress-disclaimer" class="progress-disclaimer">Score changes describe public-profile presentation, not programming skill or hiring likelihood.</p>
+              </div>
+              <div class="progress-footer">
+                <button id="progress-copy" type="button">⎘ Copy comparison</button>
+                <span id="progress-storage-note">Your baseline stays intact until you replace or clear it.</span>
+              </div>
             </div>
           </div>
         </section>

@@ -220,7 +220,15 @@ function render(data) {
     ' Audited on ' + new Date(data.analyzedAt).toLocaleDateString() + '.');
   report.hidden = false;
   window.dispatchEvent(new CustomEvent('gitroast:report', { detail: { username: data.user.login,
-    projects: data.projects.map(p => ({ name: p.name, description: p.description, hasReadme: p.hasReadme })) } }));
+    analyzedAt: data.analyzedAt,
+    scoreVersion: 1,
+    analysis: {
+      score: data.analysis.score,
+      categories: data.analysis.categories.map(({name, score, max}) => ({name, score, max})),
+      facts: data.analysis.facts
+    },
+    projects: data.projects.map(p => ({ name: p.name, description: p.description,
+      hasReadme: p.hasReadme, readmeLength: p.readmeLength })) } }));
   report.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 async function analyze(username) {

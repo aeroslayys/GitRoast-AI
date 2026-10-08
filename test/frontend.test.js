@@ -103,3 +103,15 @@ test('README Doctor has an accessible, honest, Vista-styled report', () => {
   assert.match(html,/href="\/doctor\.css"/);
   assert.match(html,/href="#readme-doctor"/);
 });
+
+
+test('Vista Aero progress tracking is opt-in and has separate source disclosure', () => {
+  for(const id of ['progress-tracker','progress-save','progress-refresh','progress-clear',
+    'progress-results','progress-category-list','progress-facts','progress-delta']){
+    assert.match(html,new RegExp('id="'+id+'"'));
+  }
+  assert.match(html,/src="\/progress\.js"/);
+  assert.match(html,/href="\/progress\.css"/);
+  assert.match(js,/scoreVersion:\s*1/);
+  assert.match(js,/gitroast:report/);
+});
