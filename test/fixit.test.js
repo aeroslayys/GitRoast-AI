@@ -61,6 +61,7 @@ test('rules-based drafts use placeholders and do not invent install commands', (
   assert.match(draft.description, /\[What solar-app does\]/);
   assert.match(draft.readme, /Add real installation and run commands/);
   assert.match(draft.readme, /Primary language shown on GitHub: JavaScript/);
+  assert.match(draft.readme, /Demo and screenshots\n- \[Add a verified demo URL, if available\]\n- \[Add an actual screenshot/);
   assert.doesNotMatch(draft.readme, /npm install|npm run start|MIT License/);
   assert.ok(draft.bio.length <= 160);
 });
@@ -73,6 +74,7 @@ test('empty GitHub profile gets a bio-only draft', () => {
   assert.equal(draft.description, '');
   assert.equal(draft.readme, '');
   assert.ok(draft.bio);
+  assert.match(draft.bio, /\[Your current focus\]/);
 });
 
 test('Fix-It validates usernames and repo names before network access', async () => {

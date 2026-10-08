@@ -8,9 +8,7 @@ const clip = (text, max) => typeof text === 'string' ? text.trim().slice(0, max)
 
 export function fallbackFixes(data, repo) {
   const bio = clip(data.user.bio, MAX_BIO) ||
-    (data.projects.length ?
-      'I build software projects and share what I learn. Explore my repositories to see my work.' :
-      'Learning software development. More projects and documentation coming soon.');
+    '[Your current focus] | [What you build or want to learn] | [What visitors will find here]';
   if (!repo) return { source: 'rules', model: null, repo: null, bio, description: '', readme: '' };
 
   const description = clip(repo.description, MAX_DESCRIPTION) ||
@@ -39,7 +37,8 @@ export function fallbackFixes(data, repo) {
     '[Show how a visitor can use the project.]',
     '',
     '## Demo and screenshots',
-    demo.trimEnd() + '- [Add an actual screenshot or preview]',
+    demo.trimEnd(),
+    '- [Add an actual screenshot or preview]',
     '',
     '## What I learned',
     '[Describe one specific technical lesson or challenge.]',
