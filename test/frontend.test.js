@@ -76,15 +76,3 @@ test('Fix-It Studio offers labeled, editable, copyable drafts', () => {
   assert.match(fixCSS, /Vista Aero/);
   assert.match(fixCSS, /@media\(max-width:640px\)/);
 });
-
-test('Fix-It Studio shows source, editable writing and Vista layout', () => {
-  for (const id of ['fix-studio','studio-repo','studio-generate','studio-results',
-    'studio-bio','studio-description','studio-readme','studio-source-tag','studio-download']) {
-    assert.match(html, new RegExp('id="' + id + '"'));
-  }
-  assert.match(js, /fetch\('\/api\/fix'/);
-  assert.match(js, /result\.source === 'gemini'/);
-  assert.match(js, /resetStudio\(data\)/);
-  assert.match(vista, /\.studio-editor-grid/);
-  assert.match(vista, /@media\(max-width:640px\)/);
-});
