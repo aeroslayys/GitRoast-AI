@@ -8,7 +8,7 @@ const makeAudit=(username,score,time='2026-10-08T08:00:00.000Z')=>({
   analysis:{
     score,
     categories:[
-      {name:'Profile basics',score:score>=20?20:0,max:20},
+      {name:'Profile basics',score:score>=40?10:0,max:20},
       {name:'Project clarity',score:10,max:25},
       {name:'Documentation',score:10,max:30},
       {name:'Recent work',score:5,max:15},
@@ -63,6 +63,8 @@ test('progress history saves baseline, rechecks fresh data and keeps usernames s
   assert.equal(byId('progress-comparison').hidden,true);
   assert.ok(store.has('gitroast-progress-v1-student'));
   const saved=store.get('gitroast-progress-v1-student');
+  assert.equal(baseline.analysis.categories.reduce((n,c)=>n+c.score,0),baseline.analysis.score);
+  assert.equal(updated.analysis.categories.reduce((n,c)=>n+c.score,0),updated.analysis.score);
   await byId('progress-refresh').handlers.get('click')();
   assert.equal(byId('progress-after-score').textContent,'40 / 100');
   assert.equal(byId('progress-delta').textContent,'+10 pts');

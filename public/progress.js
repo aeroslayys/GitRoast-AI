@@ -121,6 +121,8 @@
   }
   function activate(detail){
     sequence++;
+    // Invalidates an in-flight recheck when the user audits a different profile.
+    busy=false;
     const username=detail?.username;
     if(typeof username!=='string'||!/^[a-zA-Z0-9-]{1,39}$/.test(username))return reset();
     current={username,initial:record(detail)};
