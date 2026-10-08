@@ -14,8 +14,10 @@
   <link rel="stylesheet" href="/aero.css">
   <link rel="stylesheet" href="/vista.css">
   <link rel="stylesheet" href="/fixit.css">
+  <link rel="stylesheet" href="/doctor.css">
   <script src="/app.js" defer></script>
   <script src="/fixit.js" defer></script>
+  <script src="/doctor.js" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -93,6 +95,7 @@
             <p id="report-subtitle">An honest snapshot of your portfolio.</p>
           </div>
           <div class="report-buttons">
+            <a class="doctor-quicklink" href="#readme-doctor">⌕ README Doctor</a>
             <a class="fixit-quicklink" href="#fixit-studio">✦ Open Fix-It Studio</a>
             <button type="button" id="share-report" class="outline-btn">↗ Share audit</button>
             <button type="button" id="copy-report" class="outline-btn">⎘ Copy summary</button>
@@ -123,12 +126,54 @@
           <article class="panel action-panel"><div class="panel-label">05 / YOUR GLOW-UP PLAN</div><h3>Less scrolling. <span>More shipping.</span></h3><p class="panel-description">Real fixes, ordered by impact. Check them off as you go.</p><div class="progress-meta"><span>CHECKLIST PROGRESS</span><strong id="action-progress-label">0 / 0 fixed</strong></div><div id="action-progress" class="action-progress-track" role="progressbar" aria-label="Action plan completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="action-progress-fill"></span></div><div id="action-list" class="action-list"></div></article>
           <article class="panel repos-panel"><div class="repo-heading"><div><div class="panel-label">06 / PROJECTS UNDER THE MICROSCOPE</div><h3>Featured repositories</h3></div><span id="repo-count" class="tiny-counter"></span></div><div id="repo-list" class="repo-list"></div></article>
         </div>
+        <section id="readme-doctor" class="doctor-window" aria-labelledby="doctor-title">
+          <div class="doctor-titlebar"><span class="doctor-appicon" aria-hidden="true">⌕</span><span>GitRoast / README Doctor</span><span class="doctor-title-note">DOCUMENTATION CHECKUP</span></div>
+          <div class="doctor-content">
+            <div class="doctor-intro">
+              <div>
+                <div class="doctor-eyebrow">07 / PUBLIC DOCUMENTATION CHECKUP</div>
+                <h3 id="doctor-title">Is your README <span>recruiter-ready?</span></h3>
+                <p>Choose a repository. See what documentation a visitor can actually find, what's unclear, and what to fix first.</p>
+              </div>
+              <span class="doctor-sticker">✓ EVIDENCE-BASED · NO AI COST</span>
+            </div>
+            <div class="doctor-toolbar">
+              <div class="doctor-picker">
+                <label for="doctor-repo">Repository to check</label>
+                <select id="doctor-repo" disabled><option>Run an audit first</option></select>
+                <span>Analyzes a public README on demand. No source-code execution or GitHub writes.</span>
+              </div>
+              <button type="button" id="doctor-check" disabled>⌕ Examine README</button>
+            </div>
+            <p id="doctor-message" class="doctor-message" role="status" aria-live="polite">Analyze a public GitHub profile to unlock README Doctor.</p>
+            <div id="doctor-results" class="doctor-results" hidden>
+              <div class="doctor-summary">
+                <div class="doctor-count"><strong id="doctor-score">—</strong><span>of 7 documentation signals found</span></div>
+                <div class="doctor-summary-copy">
+                  <span id="doctor-state" class="doctor-state" data-state="found">README CHECKED</span>
+                  <h4 id="doctor-subtitle">Documentation results</h4>
+                  <p id="doctor-limitation">Signals are not proof of working instructions.</p>
+                </div>
+              </div>
+              <div class="doctor-meter" role="progressbar" aria-label="README signals found" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" id="doctor-meter"><span id="doctor-meter-fill"></span></div>
+              <div id="doctor-checklist" class="doctor-checklist"></div>
+              <div class="doctor-bottom">
+                <div class="doctor-first-fix"><span>✦ THE FIRST FIX</span><p id="doctor-next"></p></div>
+                <div class="doctor-actions">
+                  <a id="doctor-repo-link" href="https://github.com/" target="_blank" rel="noopener noreferrer">↗ Open repository</a>
+                  <button type="button" id="doctor-copy">⎘ Copy improvement plan</button>
+                  <a id="doctor-fixit-link" href="#fixit-studio">✦ Draft fixes in Fix-It Studio</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         <section class="fixit-studio" id="fixit-studio" aria-labelledby="fixit-heading">
           <div class="fixit-titlebar"><span class="fixit-title-icon" aria-hidden="true">✦</span><span>GitRoast / Fix-It Studio</span><span class="fixit-title-suffix">PORTFOLIO WORKSHOP</span></div>
           <div class="fixit-content">
             <div class="fixit-heading-row">
               <div>
-                <div class="fixit-eyebrow">07 / TURN YOUR FEEDBACK INTO ACTION</div>
+                <div class="fixit-eyebrow">08 / TURN YOUR FEEDBACK INTO ACTION</div>
                 <h3 id="fixit-heading">Your portfolio, <span>rewritten.</span></h3>
                 <p>Draft a clearer bio, repository description, and README outline using real public GitHub information.</p>
               </div>

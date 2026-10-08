@@ -92,3 +92,14 @@ test('every browser script parses, including Fix-It Studio', () => {
     }), path + ' must compile in a browser-compatible JS parser');
   }
 });
+
+
+test('README Doctor has an accessible, honest, Vista-styled report', () => {
+  for (const id of ['readme-doctor','doctor-repo','doctor-check','doctor-results',
+    'doctor-score','doctor-checklist','doctor-next','doctor-copy','doctor-fixit-link']) {
+    assert.match(html,new RegExp('id="'+id+'"'));
+  }
+  assert.match(html,/src="\/doctor\.js"/);
+  assert.match(html,/href="\/doctor\.css"/);
+  assert.match(html,/href="#readme-doctor"/);
+});
