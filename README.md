@@ -11,6 +11,7 @@
 3. It checks README files for up to **eight featured projects** and scores five transparent categories: profile basics (20), project clarity (25), documentation (30), recent work (15), and discoverability (10).
 4. **Gemini** writes a recruiter-style verdict, supportive feedback, and a playful, non-cruel roast. If no key is configured, the app provides accurate rules-based feedback and marks it as *data-based* rather than pretending AI was used.
 5. Users can switch between roast and kind modes, check off actionable fixes, copy a text summary, download a report, and share a profile URL like `?u=your-username`.
+6. **Fix-It Studio** (opt-in) generates an editable GitHub bio, repository description, and README Markdown outline for a chosen featured repository. Drafts can be copied or downloaded. Gemini is identified when used; deterministic templates are clearly labeled when AI is unavailable.
 6. **Fix-It Studio** (on demand) drafts an editable GitHub bio, featured repository description, and README Markdown outline using public metadata. If Gemini is unavailable, suggestions are explicitly labeled rules-based templates. A `.md` download is provided.
 
 ### Design principles
@@ -19,6 +20,8 @@
 - **Evidence first.** Code quality, talent and employability cannot be measured from API metadata alone. The score is explicitly a heuristic, never a hiring prediction.
 - **Honest limitations.** Up to 300 repos are queried, archived/forked projects are excluded, and README checks are sampled. Unknown README results are not called missing.
 - **No keys on the client.** Gemini and optional GitHub credentials live only in the Node.js backend.
+- **Writing assistance is opt-in.** `POST /api/fix` accepts `{ "username": "...", "repository": "..." }`, reads only verified public GitHub information, and caches the resulting drafts briefly. Gemini usage is never triggered merely by opening a report.
+- **Human review first.** Drafts never automatically write to GitHub; placeholders must be replaced and AI claims verified. The backend labels the draft source independently of the recruiter's feedback.
 - **No GitHub writes.** Fix-It Studio only reads public data; review, edit and copy drafts manually. Generations are opt-in, cached for ten minutes, and limited to 12 attempts per connection per hour.
 
 ## Stack

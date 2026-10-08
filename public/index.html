@@ -93,6 +93,7 @@
             <p id="report-subtitle">An honest snapshot of your portfolio.</p>
           </div>
           <div class="report-buttons">
+            <a class="studio-jump" href="#fix-studio">✦ Fix-It Studio</a>
             <button type="button" id="share-report" class="outline-btn">↗ Share audit</button>
             <button type="button" id="copy-report" class="outline-btn">⎘ Copy summary</button>
             <button type="button" id="download-report" class="outline-btn">↓ Download .txt</button>
@@ -171,6 +172,60 @@
                 </article>
               </div>
               <p class="fixit-caution">Suggestions are drafts, not verified facts. Review them before adding them to your profile or repository. GitRoast never edits GitHub on your behalf.</p>
+            </div>
+          </div>
+        </section>
+        <section id="fix-studio" class="studio-window" aria-labelledby="studio-heading">
+          <div class="studio-titlebar">
+            <div class="studio-titlebar-info"><span class="studio-app-mark" aria-hidden="true">✦</span><span>GitRoast / Fix-It Studio</span></div>
+            <span class="studio-titlebar-note">PROFILE MAKEOVER WIZARD</span>
+          </div>
+          <div class="studio-inner">
+            <div class="studio-intro">
+              <div>
+                <div class="eyebrow">07 / TURN FEEDBACK INTO FIXES</div>
+                <h3 id="studio-heading">Don't just get roasted. <span class="gradient-text">Get rewritten.</span></h3>
+                <p>Create a sharper GitHub bio, a clear repo description, and a README starter based on real public data.</p>
+              </div>
+              <span class="studio-sticker">✳ EDITABLE DRAFTS</span>
+            </div>
+            <div class="studio-toolbar">
+              <div class="studio-picker">
+                <label for="studio-repo">Project to improve</label>
+                <select id="studio-repo" aria-describedby="studio-note"><option value="">Choose a repository</option></select>
+              </div>
+              <button type="button" id="studio-generate" class="primary-btn studio-generate">✦ Generate my fixes</button>
+            </div>
+            <p class="studio-hint" id="studio-note">Suggestions are generated only when you click. Nothing is changed on GitHub.</p>
+            <p id="studio-status" class="studio-status" role="status" aria-live="polite">Select a repository above, then generate your makeover.</p>
+            <div id="studio-results" class="studio-results" hidden>
+              <div class="studio-provenance" id="studio-provenance" data-mode="rules">
+                <span id="studio-source-tag">✓ DATA-BASED DRAFTS</span>
+                <p id="studio-source-note"></p>
+              </div>
+              <div class="studio-editor-grid">
+                <article class="studio-editor">
+                  <div class="studio-editor-top"><div><span class="studio-editor-number">01</span><h4>GitHub bio</h4></div><button type="button" class="studio-copy" data-copy="studio-bio">Copy bio</button></div>
+                  <p class="studio-editor-help">Paste this into your GitHub profile settings.</p>
+                  <label class="visually-hidden" for="studio-bio">Editable GitHub bio draft</label>
+                  <textarea id="studio-bio" maxlength="160" rows="4" spellcheck="true"></textarea>
+                  <div class="studio-editor-foot"><span id="studio-bio-count">0 / 160</span><a href="https://github.com/settings/profile" target="_blank" rel="noopener noreferrer">Edit profile ↗</a></div>
+                </article>
+                <article class="studio-editor">
+                  <div class="studio-editor-top"><div><span class="studio-editor-number">02</span><h4>Repo description</h4></div><button type="button" class="studio-copy" data-copy="studio-description">Copy description</button></div>
+                  <p class="studio-editor-help">Explain what your project does in one glance.</p>
+                  <label class="visually-hidden" for="studio-description">Editable repository description draft</label>
+                  <textarea id="studio-description" maxlength="350" rows="4" spellcheck="true"></textarea>
+                  <div class="studio-editor-foot"><span id="studio-description-count">0 / 350</span><a id="studio-repo-link" href="https://github.com/" target="_blank" rel="noopener noreferrer">Open repository ↗</a></div>
+                </article>
+                <article class="studio-editor studio-editor-wide">
+                  <div class="studio-editor-top"><div><span class="studio-editor-number">03</span><h4>README starter</h4></div><div class="studio-editor-actions"><button type="button" class="studio-copy" data-copy="studio-readme">Copy Markdown</button><button type="button" id="studio-download" class="studio-copy">↓ Download README</button></div></div>
+                  <p class="studio-editor-help">Keep only verified project details. Replace [bracketed placeholders] before committing.</p>
+                  <label class="visually-hidden" for="studio-readme">Editable README Markdown draft</label>
+                  <textarea id="studio-readme" maxlength="8000" rows="15" spellcheck="false"></textarea>
+                  <div class="studio-editor-foot"><span id="studio-readme-count">0 / 8000</span><span>Markdown · no GitHub write permissions</span></div>
+                </article>
+              </div>
             </div>
           </div>
         </section>

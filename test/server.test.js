@@ -83,3 +83,57 @@ test('complete report endpoint returns real audit structure from mocked GitHub r
     if (oldKey === undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = oldKey;
   }
 });
+
+test('Fix-It Studio POST validates input and returns on-demand drafts', async () => {
+  const originalFetch = globalThis.fetch;
+  const oldKey = process.env.GEMINI_API_KEY;
+  delete process.env.GEMINI_API_KEY;
+  globalThis.fetch = async (address, options) => {
+    const url = String(address);
+    if (!url.startsWith('https://api.github.com')) return originalFetch(address, options);
+    if (url.endsWith('/users/studio-demo')) return { ok: true, json: async () => ({
+      type: 'User', login: 'studio-demo', name: 'Demo', bio: '', public_repos: 1
+    }) };
+    if (url.includes('/users/studio-demo/repos?')) return { ok: true, json: async () => [{
+      name: 'starter', full_name: 'studio-demo/starter', owner: { login: 'studio-demo' },
+      description: '', language: 'JavaScript', html_url: 'https://github.com/studio-demo/starter',
+      pushed_at: '2026-10-01', fork: false, archived: false, stargazers_count: 0,
+      topics: [], homepage: ''
+    }] };
+    if (url.endsWith('/readme')) return { status: 404, ok: false };
+    throw Error('Unexpected GitHub URL: ' + url);
+  };
+  const server = createApp();
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const url = 'http://127.0.0.1:' + server.address().port;
+  const post = (payload, headers = { 'Content-Type': 'application/json' }) =>
+    originalFetch(url + '/api/fix', { method: 'POST', headers, body: JSON.stringify(payload) });
+  try {
+    const method = await originalFetch(url + '/api/fix');
+    assert.equal(method.status, 405);
+    const type = await post({ username: 'studio-demo' }, { 'Content-Type': 'text/plain' });
+    assert.equal(type.status, 415);
+    const badName = await post({ username: '../nope' });
+    assert.equal(badName.status, 400);
+    const badRepo = await post({ username: 'studio-demo', repository: 'other' });
+    assert.equal(badRepo.status, 400);
+    const result = await post({ username: 'studio-demo', repository: 'starter' });
+    assert.equal(result.status, 200);
+    const draft = await result.json();
+    assert.equal(draft.source, 'rules');
+    assert.equal(draft.repository.name, 'starter');
+    assert.ok(draft.suggestions.bio.length <= 160);
+    assert.match(draft.suggestions.readme, /## Getting started/);
+    const again = await post({ username: 'studio-demo', repository: 'starter' });
+    assert.equal(again.status, 200);
+    const tooLong = await originalFetch(url + '/api/fix', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: 'studio-demo', filler: 'x'.repeat(3000) })
+    });
+    assert.equal(tooLong.status, 413);
+  } finally {
+    await new Promise(resolve => server.close(resolve));
+    globalThis.fetch = originalFetch;
+    if (oldKey === undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = oldKey;
+  }
+});

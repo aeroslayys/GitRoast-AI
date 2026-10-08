@@ -3,10 +3,12 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { collectProfile, scoreProfile, aiFeedback, validUsername, ApiError } from './engine.js';
+import { chooseProject, generateFixes } from './fixer.js';
 import { generateFixes } from './fixit.js';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const cache = new Map();
+const studioCache = new Map();
 const requests = new Map();
 const fixCache = new Map();
 const fixRequests = new Map();
@@ -40,6 +42,56 @@ export async function handle(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'");
+  if (url.pathname === '/api/fix') {
+    if (req.method !== 'POST') return json(res, 405, { error: 'Use POST to generate fixes.' });
+    if (!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type'] || '')) {
+      return json(res, 415, { error: 'Send JSON to generate fixes.' });
+    }
+    let raw = '';
+    try {
+      for await (const chunk of req) {
+        raw += chunk.toString('utf8');
+        if (Buffer.byteLength(raw, 'utf8') > 2048) return json(res, 413, { error: 'Request is too large.' });
+      }
+    } catch { return json(res, 400, { error: 'Unable to read request.' }); }
+    let input;
+    try { input = JSON.parse(raw); } catch { return json(res, 400, { error: 'Invalid JSON.' }); }
+    const username = typeof input?.username === 'string' ? input.username.trim() : '';
+    const repository = input?.repository === undefined ? '' : input.repository;
+    if (!validUsername(username)) return json(res, 400, { error: 'Enter a valid GitHub username.' });
+    if (typeof repository !== 'string' || repository.length > 100 ||
+        (repository && !/^[a-zA-Z0-9_.-]+$/.test(repository))) {
+      return json(res, 400, { error: 'Choose a valid repository.' });
+    }
+    if (tooMany(req.socket.remoteAddress || 'unknown')) {
+      return json(res, 429, { error: 'Too many requests. Please retry later.' });
+    }
+    // Explicitly generated on demand; cache for 10 minutes to avoid duplicate Gemini charges.
+    const key = username.toLowerCase() + '/' + repository.toLowerCase();
+    const existing = studioCache.get(key);
+    if (existing && existing.expires > Date.now()) {
+      try { return json(res, 200, await existing.promise); }
+      catch { studioCache.delete(key); }
+    }
+    if (studioCache.size >= 200) {
+      for (const [k, v] of studioCache) if (v.expires < Date.now()) studioCache.delete(k);
+      if (studioCache.size >= 200) studioCache.delete(studioCache.keys().next().value);
+    }
+    const promise = (async () => {
+      const profile = await collectProfile(username);
+      const project = chooseProject(profile, repository);
+      const fix = await generateFixes(profile, project);
+      return { username: profile.user.login, ...fix };
+    })();
+    studioCache.set(key, { promise, expires: Date.now() + TTL });
+    try { return json(res, 200, await promise); }
+    catch (error) {
+      studioCache.delete(key);
+      const status = error instanceof ApiError ? error.status : 500;
+      console.error('Fix-It Studio error:', error.message);
+      return json(res, status, { error: status === 500 ? 'Could not generate fixes. Please retry.' : error.message });
+    }
+  }
   if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed.' });
   if (url.pathname === '/api/fixit') {
     const username = (url.searchParams.get('username') || '').trim();
