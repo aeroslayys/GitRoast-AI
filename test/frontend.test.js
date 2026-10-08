@@ -5,6 +5,7 @@ const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf
 const js = readFileSync(new URL('../public/app.js', import.meta.url), 'utf8');
 const style = readFileSync(new URL('../public/style.css', import.meta.url), 'utf8');
 const aero = readFileSync(new URL('../public/aero.css', import.meta.url), 'utf8');
+const vista = readFileSync(new URL('../public/vista.css', import.meta.url), 'utf8');
 test('feedback provenance visible in report', () => {
   for (const id of ['source-banner','source-title','source-description','source-tag','feedback-method','ai-badge']) {
     assert.match(html, new RegExp('id="'+id+'"'));
@@ -35,4 +36,15 @@ test('soft mist theme remains Aero but uses subdued colors', () => {
   assert.match(aero, /Frutiger Aero • Soft Mist Edition/);
   assert.match(aero, /#b7d0d6/);
   assert.match(aero, /\.source-banner\[data-mode="rules"\]/);
+});
+
+test('Vista Aero styling has readable typography and clear glass UI', () => {
+  assert.match(html, /href="\/vista\.css"/);
+  assert.match(html, /vista-window-controls/);
+  assert.match(vista, /Segoe UI/);
+  assert.match(vista, /font-size:\s*16px/);
+  assert.match(vista, /\.source-banner\[data-mode="gemini"\]/);
+  assert.match(vista, /\.source-banner\[data-mode="rules"\]/);
+  assert.match(vista, /@media\s*\(max-width:\s*640px\)/);
+  assert.match(vista, /prefers-reduced-motion/);
 });

@@ -14,6 +14,10 @@ test('serves health check, homepage, stylesheet and rejects malformed names', as
     const home = await fetch(url);
     assert.equal(home.status, 200);
     assert.match(await home.text(), /GitRoast AI/);
+    const vista = await fetch(url + '/vista.css');
+    assert.equal(vista.status, 200);
+    assert.match(vista.headers.get('content-type'), /text\/css/);
+    assert.match(await vista.text(), /Windows Vista Aero/);
     const aero = await fetch(url + '/aero.css');
     assert.equal(aero.status, 200);
     assert.match(await aero.text(), /Frutiger Aero/);

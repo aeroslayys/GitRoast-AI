@@ -13,6 +13,7 @@ const pages = {
   '/index.html': ['index.html', 'text/html; charset=utf-8'],
   '/style.css': ['style.css', 'text/css; charset=utf-8'],
   '/aero.css': ['aero.css', 'text/css; charset=utf-8'],
+  '/vista.css': ['vista.css', 'text/css; charset=utf-8'],
   '/aero-landscape.svg': ['aero-landscape.svg', 'image/svg+xml'],
   '/favicon.svg': ['favicon.svg', 'image/svg+xml'],
   '/app.js': ['app.js', 'text/javascript; charset=utf-8']
