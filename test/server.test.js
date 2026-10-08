@@ -175,3 +175,31 @@ test('progress recheck reads fresh public metrics and never calls Gemini',async(
     if(oldKey===undefined)delete process.env.GEMINI_API_KEY;else process.env.GEMINI_API_KEY=oldKey;
   }
 });
+
+
+test('serves every local CSS and JavaScript declared by the homepage', async () => {
+  const server = createApp();
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const url = 'http://127.0.0.1:' + server.address().port;
+  try {
+    const home = await fetch(url + '/');
+    assert.equal(home.status, 200);
+    const html = await home.text();
+    const assets = [
+      ...[...html.matchAll(/<link[^>]+href="(\/[^"]+\.(?:css))"/g)].map(match => match[1]),
+      ...[...html.matchAll(/<script[^>]+src="(\/[^"]+\.(?:js))"/g)].map(match => match[1])
+    ];
+    assert.ok(assets.includes('/workspace.css'), 'workflow styles must be loaded');
+    assert.ok(assets.includes('/workspace.js'), 'workflow interactions must be loaded');
+    for (const asset of assets) {
+      const response = await fetch(url + asset);
+      assert.equal(response.status, 200, asset + ' must be served; missing JS breaks interactive tabs');
+      const contentType = response.headers.get('content-type');
+      assert.match(contentType, asset.endsWith('.css') ? /text\/css/ : /(?:text|application)\/javascript/, asset);
+      const content = await response.text();
+      assert.ok(content.trim().length > 100, asset + ' must not return an empty page');
+    }
+  } finally {
+    await new Promise(resolve => server.close(resolve));
+  }
+});
