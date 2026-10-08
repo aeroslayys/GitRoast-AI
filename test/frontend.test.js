@@ -103,7 +103,7 @@ test('README Doctor has an accessible, honest, Vista-styled report', () => {
   }
   assert.match(html,/src="\/doctor\.js"/);
   assert.match(html,/href="\/doctor\.css"/);
-  assert.match(html,/href="#readme-doctor"/);
+  assert.match(html,/id="workshop-tab-check"/);
 });
 
 
