@@ -134,7 +134,9 @@
       notice('README improvement plan copied.','success');}
     catch{notice('Clipboard unavailable. You can select the findings manually.','error');}
   });
-  byId('doctor-fixit-link').addEventListener('click',()=>{
+  byId('doctor-fixit-link').addEventListener('click',event=>{
+    event.preventDefault();
+    window.dispatchEvent(new CustomEvent('gitroast:workshop-tool',{detail:{tool:'write'}}));
     if(!profile)return;
     const target=byId('fixit-repo');
     if(!target||target.disabled)return;

@@ -16,10 +16,12 @@
   <link rel="stylesheet" href="/fixit.css">
   <link rel="stylesheet" href="/doctor.css">
   <link rel="stylesheet" href="/progress.css">
+  <link rel="stylesheet" href="/workspace.css">
   <script src="/app.js" defer></script>
   <script src="/fixit.js" defer></script>
   <script src="/doctor.js" defer></script>
   <script src="/progress.js" defer></script>
+  <script src="/workspace.js" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -97,15 +99,18 @@
             <p id="report-subtitle">An honest snapshot of your portfolio.</p>
           </div>
           <div class="report-buttons">
-            <a class="progress-quicklink" href="#progress-tracker">↗ My Progress</a>
-            <a class="doctor-quicklink" href="#readme-doctor">⌕ README Doctor</a>
-            <a class="fixit-quicklink" href="#fixit-studio">✦ Open Fix-It Studio</a>
-            <button type="button" id="share-report" class="outline-btn">↗ Share audit</button>
+            <button type="button" id="share-report" class="outline-btn">↗ Share</button>
             <button type="button" id="copy-report" class="outline-btn">⎘ Copy summary</button>
-            <button type="button" id="download-report" class="outline-btn">↓ Download .txt</button>
+            <button type="button" id="download-report" class="outline-btn">↓ Download</button>
             <button type="button" id="new-search" class="subtle-btn">↻ New audit</button>
           </div>
         </div>
+        <div class="audit-navigation" role="tablist" aria-label="Portfolio workflow">
+          <button id="audit-tab-review" type="button" role="tab" aria-selected="true" tabindex="0" aria-controls="audit-review"><span>01</span><strong>Review</strong><small>Score &amp; verdict</small></button>
+          <button id="audit-tab-improve" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="audit-improve"><span>02</span><strong>Improve</strong><small>Plan &amp; write</small></button>
+          <button id="audit-tab-track" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="audit-track"><span>03</span><strong>Track</strong><small>Before &amp; after</small></button>
+        </div>
+        <section id="audit-review" class="audit-view" role="tabpanel" aria-labelledby="audit-tab-review">
         <section id="source-banner" class="source-banner" data-mode="rules" role="status" aria-live="polite" aria-label="Feedback generation status">
           <div class="source-insignia" id="source-icon" aria-hidden="true">✳</div>
           <div class="source-main">
@@ -126,15 +131,38 @@
           <article class="panel score-panel"><div class="panel-label">02 / FIRST IMPRESSION SCORE</div><div class="score-layout"><div id="score-gauge" class="score-gauge"><div><strong id="score-number">—</strong><small>OUT OF 100</small></div></div><div class="score-text"><span id="score-badge" class="score-badge">Analyzing</span><h3 id="score-label">—</h3><p>A transparent portfolio-health score, not a prediction of hiring success.</p></div></div></article>
           <article class="panel breakdown-panel"><div class="panel-label">03 / THE BREAKDOWN</div><div id="breakdown-list" class="breakdown-list"></div></article>
           <article class="panel feedback-panel"><div class="feedback-heading"><div class="panel-label">04 / YOUR 30-SECOND VERDICT</div><span id="ai-badge" class="ai-badge">AI</span></div><h3 id="feedback-headline"></h3><p id="feedback-verdict" class="feedback-verdict"></p><p id="feedback-method" class="feedback-method"></p><div class="tone-tabs" role="group" aria-label="Feedback tone"><button type="button" id="tone-roast" class="tone-button active" aria-pressed="true">🔥 Roast mode</button><button type="button" id="tone-kind" class="tone-button" aria-pressed="false">♡ Kind mode</button></div><blockquote id="feedback-quote" class="feedback-quote"></blockquote><div class="next-step"><span>✦ FIRST MOVE</span><p id="feedback-next"></p></div></article>
-          <article class="panel action-panel"><div class="panel-label">05 / YOUR GLOW-UP PLAN</div><h3>Less scrolling. <span>More shipping.</span></h3><p class="panel-description">Real fixes, ordered by impact. Check them off as you go.</p><div class="progress-meta"><span>CHECKLIST PROGRESS</span><strong id="action-progress-label">0 / 0 fixed</strong></div><div id="action-progress" class="action-progress-track" role="progressbar" aria-label="Action plan completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="action-progress-fill"></span></div><div id="action-list" class="action-list"></div></article>
-          <article class="panel repos-panel"><div class="repo-heading"><div><div class="panel-label">06 / PROJECTS UNDER THE MICROSCOPE</div><h3>Featured repositories</h3></div><span id="repo-count" class="tiny-counter"></span></div><div id="repo-list" class="repo-list"></div></article>
+
+
         </div>
-        <section id="readme-doctor" class="doctor-window" aria-labelledby="doctor-title">
+        </section>
+        <section id="audit-improve" class="audit-view" role="tabpanel" aria-labelledby="audit-tab-improve" hidden>
+          <div class="improve-heading"><div><span class="eyebrow">YOUR NEXT MOVES</span><h3>Know what to fix. <span class="gradient-text">Then fix it.</span></h3></div><p>One improvement plan, one workshop, no repeated reports.</p></div>
+          <div class="improve-overview">
+                      <article class="panel action-panel"><div class="panel-label">GLOW-UP CHECKLIST</div><h3>Less scrolling. <span>More shipping.</span></h3><p class="panel-description">Real fixes, ordered by impact. Check them off as you go.</p><div class="progress-meta"><span>CHECKLIST PROGRESS</span><strong id="action-progress-label">0 / 0 fixed</strong></div><div id="action-progress" class="action-progress-track" role="progressbar" aria-label="Action plan completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="action-progress-fill"></span></div><div id="action-list" class="action-list"></div><button type="button" id="action-more" class="action-more" aria-expanded="false" hidden>Show remaining fixes</button></article>
+            <details class="featured-details" id="featured-details">
+              <summary>⌕ Browse featured repositories <span>Expand ▾</span></summary>
+                        <article class="panel repos-panel"><div class="repo-heading"><div><div class="panel-label">SAMPLED REPOSITORIES</div><h3>Featured repositories</h3></div><span id="repo-count" class="tiny-counter"></span></div><div id="repo-list" class="repo-list"></div></article>
+            </details>
+          </div>
+          <div id="improve-workspace" class="improve-workspace">
+            <div class="improve-workspace-head">
+              <div><span class="eyebrow">PORTFOLIO WORKSHOP</span><h3>Inspect, then improve.</h3><p>Check the README and create editable writing suggestions for the same project.</p></div>
+              <span class="workshop-safety">Public data · Review drafts before publishing</span>
+            </div>
+            <div class="workshop-picker-row">
+              <label for="workshop-repo">Your repository</label>
+              <select id="workshop-repo" disabled><option value="">Run an audit first</option></select>
+            </div>
+            <div class="workshop-tools" role="tablist" aria-label="Improvement tools">
+              <button id="workshop-tab-check" type="button" role="tab" aria-selected="true" tabindex="0" aria-controls="readme-doctor">⌕ Check README <small>What's missing?</small></button>
+              <button id="workshop-tab-write" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="fixit-studio">✦ Write fixes <small>Editable drafts</small></button>
+            </div>
+        <section id="readme-doctor" class="doctor-window" role="tabpanel" aria-labelledby="workshop-tab-check">
           <div class="doctor-titlebar"><span class="doctor-appicon" aria-hidden="true">⌕</span><span>GitRoast / README Doctor</span><span class="doctor-title-note">DOCUMENTATION CHECKUP</span></div>
           <div class="doctor-content">
             <div class="doctor-intro">
               <div>
-                <div class="doctor-eyebrow">07 / PUBLIC DOCUMENTATION CHECKUP</div>
+                <div class="doctor-eyebrow">DOCUMENTATION CHECK</div>
                 <h3 id="doctor-title">Is your README <span>recruiter-ready?</span></h3>
                 <p>Choose a repository. See what documentation a visitor can actually find, what's unclear, and what to fix first.</p>
               </div>
@@ -165,18 +193,18 @@
                 <div class="doctor-actions">
                   <a id="doctor-repo-link" href="https://github.com/" target="_blank" rel="noopener noreferrer">↗ Open repository</a>
                   <button type="button" id="doctor-copy">⎘ Copy improvement plan</button>
-                  <a id="doctor-fixit-link" href="#fixit-studio">✦ Draft fixes in Fix-It Studio</a>
+                  <a id="doctor-fixit-link" href="#improve-workspace">✦ Open writing tools</a>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        <section class="fixit-studio" id="fixit-studio" aria-labelledby="fixit-heading">
+        <section class="fixit-studio" id="fixit-studio" role="tabpanel" aria-labelledby="workshop-tab-write" hidden>
           <div class="fixit-titlebar"><span class="fixit-title-icon" aria-hidden="true">✦</span><span>GitRoast / Fix-It Studio</span><span class="fixit-title-suffix">PORTFOLIO WORKSHOP</span></div>
           <div class="fixit-content">
             <div class="fixit-heading-row">
               <div>
-                <div class="fixit-eyebrow">08 / TURN YOUR FEEDBACK INTO ACTION</div>
+                <div class="fixit-eyebrow">DRAFT EDITABLE FIXES</div>
                 <h3 id="fixit-heading">Your portfolio, <span>rewritten.</span></h3>
                 <p>Draft a clearer bio, repository description, and README outline using real public GitHub information.</p>
               </div>
@@ -223,6 +251,9 @@
             </div>
           </div>
         </section>
+          </div>
+        </section>
+        <section id="audit-track" class="audit-view" role="tabpanel" aria-labelledby="audit-tab-track" hidden>
         <section id="progress-tracker" class="progress-window" aria-labelledby="progress-title">
           <div class="progress-titlebar">
             <span class="progress-appicon" aria-hidden="true">↗</span>
@@ -232,7 +263,7 @@
           <div class="progress-content">
             <div class="progress-intro">
               <div>
-                <div class="progress-eyebrow">09 / YOUR GITHUB GLOW-UP JOURNEY</div>
+                <div class="progress-eyebrow">BEFORE & AFTER</div>
                 <h3 id="progress-title">Your progress, <span>in real numbers.</span></h3>
                 <p>Save today's baseline, improve your public GitHub profile, and recheck to see exactly which signals changed.</p>
               </div>
@@ -277,6 +308,7 @@
               </div>
             </div>
           </div>
+        </section>
         </section>
         <p id="report-disclaimer" class="report-disclaimer"></p>
       </section>

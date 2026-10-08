@@ -173,6 +173,11 @@ function renderActions(data) {
     item.append(check, content); area.append(item);
   }
   updateActionProgress();
+  const more=byId('action-more');
+  more.hidden=data.analysis.actions.length<=3;
+  more.textContent='Show all '+data.analysis.actions.length+' fixes';
+  more.setAttribute('aria-expanded','false');
+  byId('action-list').classList.remove('expanded');
 }
 function renderRepos(data) {
   const area = byId('repo-list'); empty(area);
@@ -219,6 +224,7 @@ function render(data) {
   setText('report-disclaimer', data.analysis.disclaimer + (data.capped ? ' Only the first 300 public repositories were scanned.' : '') +
     ' Audited on ' + new Date(data.analyzedAt).toLocaleDateString() + '.');
   report.hidden = false;
+  document.body.classList.add('has-report');
   window.dispatchEvent(new CustomEvent('gitroast:report', { detail: { username: data.user.login,
     analyzedAt: data.analyzedAt,
     scoreVersion: 1,
@@ -261,10 +267,16 @@ document.querySelectorAll('[data-user]').forEach(button => button.addEventListen
   input.value = button.dataset.user;
   analyze(input.value);
 }));
+byId('action-more').addEventListener('click',()=>{
+  const area=byId('action-list'),expanded=area.classList.toggle('expanded');
+  const button=byId('action-more');
+  button.setAttribute('aria-expanded',String(expanded));
+  button.textContent=expanded?'Show fewer fixes':'Show all fixes';
+});
 byId('tone-roast').addEventListener('click', () => { tone = 'roast'; updateTone(); });
 byId('tone-kind').addEventListener('click', () => { tone = 'kind'; updateTone(); });
 byId('new-search').addEventListener('click', () => {
-  report.hidden = true; current = null; clearError(); input.focus();
+  report.hidden = true; document.body.classList.remove('has-report'); current = null; clearError(); input.focus();
   window.dispatchEvent(new Event('gitroast:reset'));
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });

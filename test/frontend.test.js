@@ -78,9 +78,11 @@ test('Fix-It Studio offers labeled, editable, copyable drafts', () => {
   assert.match(fixCSS, /@media\(max-width:640px\)/);
 });
 
-test('Fix-It Studio is discoverable from report actions', () => {
-  assert.match(html, /href="#fixit-studio"/);
-  assert.match(html, /class="fixit-quicklink"/);
+test('Doctor and writing tools share a single improvement workspace', () => {
+  assert.match(html, /id="improve-workspace"/);
+  assert.match(html, /id="workshop-repo"/);
+  assert.match(html, /id="workshop-tab-write"/);
+  assert.doesNotMatch(html, /class="fixit-quicklink"/);
 });
 
 
@@ -114,4 +116,12 @@ test('Vista Aero progress tracking is opt-in and has separate source disclosure'
   assert.match(html,/href="\/progress\.css"/);
   assert.match(js,/scoreVersion:\s*1/);
   assert.match(js,/gitroast:report/);
+});
+
+test('report consolidates into three workflow stages', () => {
+  for (const id of ['audit-review','audit-improve','audit-track','audit-tab-review',
+    'audit-tab-improve','audit-tab-track','workshop-repo','workshop-tab-check','workshop-tab-write'])
+    assert.match(html,new RegExp('id="'+id+'"'));
+  assert.match(html,/src="\/workspace\.js"/);
+  assert.match(html,/href="\/workspace\.css"/);
 });

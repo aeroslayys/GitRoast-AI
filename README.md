@@ -15,6 +15,10 @@
 7. **Before & After Progress Tracker** lets students save a baseline in their own browser and run a fresh, Gemini-free recheck of public GitHub scoring signals. It compares the five score categories and observable repository metrics; saved baselines never sync to the server.
 8. **Fix-It Studio** (on demand) drafts an editable GitHub bio, featured repository description, and README Markdown outline using public metadata. If Gemini is unavailable, suggestions are explicitly labeled rules-based templates. A `.md` download is provided.
 
+### Streamlined interface
+
+The report now has three stages: **Review** (score and recruiter verdict), **Improve** (one Glow-Up Plan plus an integrated README check and Fix-It writing workshop using one repository selector), and **Track** (before/after progress). Featured projects are collapsible, and the landing-page marketing sections hide when a report is open. Existing checklists, Gemini source badges, and local progress baselines are preserved.
+
 ### Design principles
 
 - **Constructive, not cruel.** Comment on observable portfolio presentation, not personal worth.
