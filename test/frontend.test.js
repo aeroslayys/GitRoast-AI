@@ -30,3 +30,9 @@ test('Frutiger Aero redesign is loaded and responsive', () => {
   assert.match(aero, /@media\s*\(max-width:\s*640px\)/);
   assert.match(aero, /prefers-reduced-motion/);
 });
+
+test('soft mist theme remains Aero but uses subdued colors', () => {
+  assert.match(aero, /Frutiger Aero • Soft Mist Edition/);
+  assert.match(aero, /#b7d0d6/);
+  assert.match(aero, /\.source-banner\[data-mode="rules"\]/);
+});

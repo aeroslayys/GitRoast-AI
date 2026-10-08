@@ -640,3 +640,300 @@ footer { border-top:1px solid #9bd6dbaa; color:#537b89; }
   .panel,.report-grid .panel,.source-banner {border:1px solid #bbb;background:white;box-shadow:none;backdrop-filter:none;}
   .source-main h3,.score-text h3,.panel-label {color:#213b4a;}
 }
+
+
+/* --------------------------------------------------------------
+   Frutiger Aero • Soft Mist Edition
+   Subdued sea-glass, stormy sky blue and sage. Keeps the glass
+   depth and landscape but dials back saturation and glare.
+   -------------------------------------------------------------- */
+:root {
+  --bg: #d6e2e0;
+  --panel: #e9f1efeb;
+  --panel2: #d6e7e7;
+  --line: #adcad0;
+  --text: #264b5c;
+  --muted: #627d82;
+  --purple: #4e96ac;
+  --pink: #aecbd3;
+  --warm: #dae1af;
+  --mint: #6c9e7b;
+}
+html { background: #cddde0; }
+body {
+  background-color: #d3e0df;
+  color: #254b5b;
+  background-image:
+    radial-gradient(circle at 9% 12%, #ffffff66 0%, transparent 28%),
+    radial-gradient(circle at 89% 16%, #9dc6d05c 0%, transparent 35%),
+    radial-gradient(circle at 15% 61%, #a9c8af52 0%, transparent 40%),
+    linear-gradient(170deg, #b7d0d6 0%, #d3e1e0 35%, #dfe9e3 68%, #d0dfdc 100%);
+}
+::selection { background:#a6c5b2; color:#1a3c4b; }
+.ambient { opacity: .18; filter: blur(110px); }
+.ambient-one { background: #83aeba; }
+.ambient-two { background: #98b2a0; opacity:.17; }
+.aero-bubble { opacity:.55; filter:saturate(.6); box-shadow:
+  inset 8px 10px 19px #ffffff9b,
+  inset -12px -16px 25px #6695a331,
+  2px 12px 29px #648b981f,
+  0 0 0 1px #8eb9bc31;
+}
+.aero-bubble::before { opacity:.72; }
+
+.topbar {
+  border-color: #eff8f5d0;
+  border-bottom-color: #a5c4c8;
+  background:linear-gradient(180deg,#f3f7f4e8,#e1eeecdc 60%,#cddfe0da);
+  box-shadow:inset 0 1px 0 #ffffffc6,0 9px 26px #516f7d20,0 1px 2px #63818c22;
+}
+.brand { color:#2c5365; text-shadow:0 1px #fff9; }
+.brand-ai,.footer-brand span { color:#4d93a6; }
+.logo-icon {
+  background:linear-gradient(150deg,#b5d8a2,#75b6a6 50%,#588ca5);
+  box-shadow:inset 0 2px 3px #ffffff91,inset 0 -3px 8px #396a7961,0 3px 9px #527a8236;
+}
+.nav-links { color:#54717c; }
+.nav-links a:hover { color:#285e72;background:#ffffff7d; }
+.top-status { color:#446b64; }
+.live-dot {background:#77ac7b;box-shadow:0 0 0 4px #8fbd9455,0 0 8px #82b18c;}
+
+.hero::before { opacity:.71; filter:saturate(.8); }
+.hero::after { background:linear-gradient(90deg,#dce9e8c4 0%,#d8e4e2a0 44%,#d8e5e135 76%,transparent); }
+.hero .eyebrow {
+  background: #edf5f0ca;
+  border-color:#f6f9f4a8;
+  box-shadow:0 4px 14px #72929b16,inset 0 1px 0 #ffffffb2;
+}
+.eyebrow { color:#43788a;text-shadow:0 1px #fff7; }
+.sparkle { color:#7aa687; }
+.hero h1 { color:#274e62;text-shadow:0 1px 0 #ffffffa1; }
+.gradient-text {
+  background:linear-gradient(100deg,#337891 4%,#5c9da4 46%,#749d7a 91%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 1px 0 #ffffff5c);
+}
+.hero-description { color:#4e707a; text-shadow:0 1px #fffb; }
+.input-wrap {
+  border-color:#adcdd0;
+  background:linear-gradient(180deg,#f6f9f4e8,#e8f2efdc 60%,#d7e8e6df);
+  box-shadow:inset 0 2px 0 #ffffffc4,0 5px 0 #a8c4c348,0 12px 27px #668b982c;
+}
+.input-wrap:focus-within { border-color:#5a9db2;box-shadow:0 0 0 3px #91bac057,0 9px 24px #668a932b; }
+.github-icon { color:#568193; }
+.prefix { color:#698a92; }
+.input-wrap input { color:#234e63; }
+.input-wrap input::placeholder { color:#849fa0; }
+.primary-btn {
+  border-color:#5a8fa5;
+  color:#f8fdfb;
+  background:linear-gradient(180deg,#9ac7d4 0%,#6eaac0 48%,#518fa9 52%,#417d98 100%);
+  box-shadow:inset 0 2px 0 #ffffff91,inset 0 -2px 5px #356e8560,0 6px 14px #4c819a31;
+  text-shadow:0 1px 1px #305a719c;
+}
+.primary-btn:hover { filter:brightness(1.04);box-shadow:inset 0 1px #fff9,0 8px 18px #5b849740; }
+.try-line>span { color:#67878b; }
+.try-chip {
+  background:linear-gradient(180deg,#f3f7f3dc,#dfecebdc);
+  border-color:#b4cccf;
+  color:#4a7180;
+  box-shadow:inset 0 1px 0 #fffc,0 3px 7px #63889116;
+}
+.try-chip:hover { color:#2c6b7c;border-color:#7baeb9;background:#f5faf7; }
+.trust-row { color:#57796f; }
+.trust-icon { color:#6c9e7b; }
+.separator { color:#94b6ad; }
+.form-error {background:#f6ebebec;color:#914d53;border-color:#d0a4aa;}
+
+.art-glow { background:radial-gradient(circle,#ffffff77,#b8d9db64 52%,transparent 84%);filter:blur(27px); }
+.mock-window {
+  border-color:#f5f9f0db;
+  background:linear-gradient(140deg,#edf5f0ea,#dbe9e9ed 60%,#cfdfdeec);
+  box-shadow:inset 0 1px 0 #fff9,inset -1px -3px 7px #8cabb44a,0 20px 62px #4d77863c,0 0 0 1px #a3c1c77a;
+}
+.window-top {
+  border-color:#a8c5c8;
+  background:linear-gradient(180deg,#f0f7f3ed,#d3e7e7ef 58%,#b3d0d5e8);
+  color:#53798a;
+}
+.window-title { color:#426c7a; }
+.mock-topline { color:#658c98; }
+.mock-topline-status { color:#548d6d; }
+.mock-avatar {
+  background:linear-gradient(145deg,#b8d7aa,#7bb1a8,#5c92a6);
+  box-shadow:inset 0 2px 0 #ffffff92,0 5px 12px #688e9938;
+}
+.mock-profile strong { color:#345d70; }
+.mock-profile span { color:#728e98; }
+.mock-star { color:#82a77f; }
+.mock-rule { background:#b7cdce; }
+.small-label,.mock-progress>span { color:#607f8c; }
+.mock-number {color:#2d586c;}
+.mock-number span {color:#7c969e;}
+.mock-good {color:#5f946c;}
+.mock-donut {background:conic-gradient(#6dabbc 0%,#a0c49b 72%,#c7d8d5 72%);box-shadow:inset 0 2px 5px #fff8,0 4px 12px #70969b2d;}
+.mock-donut:before {background:linear-gradient(#f0f7f1,#dae9e7);}
+.mock-donut span {color:#3b7180;}
+.mock-progress>div {background:#c5d9d8;}
+.mock-progress i {background:linear-gradient(90deg,#69a5b5,#9cbd98);}
+.mock-quote {
+  border-color:#b8d1c5;
+  background:linear-gradient(140deg,#f2f8f1d7,#dcebe1ce);
+  color:#4d6f70;
+}
+.mock-quote span { color:#82aa98; }
+.mock-footer,.mock-footer span:first-child {color:#699091;}
+.floating-tag {
+  background:linear-gradient(180deg,#f4f8f3ed,#e2eeeae8 60%,#d0e2e0dc);
+  border-color:#f3f8f2d5;
+  color:#527986;
+  box-shadow:inset 0 1px #fff9,0 7px 20px #607d8930;
+}
+.floating-tag span,.tag-two span {color:#7da68f;}
+
+.section-rule {
+  border-color:#f1f7f0cf;
+  background:linear-gradient(90deg,#e9f2edcf,#f0f5efba,#dceae3d0);
+  color:#537d83;
+  box-shadow:inset 0 1px 0 #ffffffa1,0 8px 20px #6e929723;
+}
+.section-rule span:last-child { color:#82a887; }
+.section-heading h2,.bottom-banner h2 {color:#355e6c;}
+.section-heading p,.bottom-banner p {color:#627c83;}
+.feature-card,.report-grid .panel,.panel {
+  border-color:#f5f8f3d9;
+  border-bottom-color:#b8cfcc;
+  background:linear-gradient(145deg,#f0f7f1e6,#e6efedeb 76%,#dbeae1dc);
+  box-shadow:inset 0 1px #ffffffb0,0 11px 30px #698b9222;
+}
+.feature-card:hover { border-color:#a5c3be;box-shadow:0 13px 28px #627f8732;transform:translateY(-3px); }
+.feature-card h3,.action-panel h3,.repos-panel h3 {color:#345d6b;}
+.feature-card p {color:#617d83;}
+.feature-number {color:#81a4a1;}
+.feature-icon {
+  background:linear-gradient(155deg,#e0ede6,#add1c5 60%,#82aab7);
+  color:#456d79;
+  box-shadow:inset 0 1px #ffffffa3,0 4px 11px #6c929127;
+}
+.bottom-banner {
+  background:linear-gradient(110deg,#dbece3e0,#c8e0e4ed 56%,#dce9d6e3);
+  border-color:#eef7efdb;
+  box-shadow:inset 0 1px #fff9,0 13px 34px #718f972d;
+}
+.bottom-banner::after { opacity:.56;filter:saturate(.6); }
+.bottom-banner h2 { color:#345f6d; }
+.bottom-banner p {color:#617e81;}
+footer {border-top-color:#b0cbc8;color:#69868b;}
+.footer-brand {color:#456b76;}
+.report-header h2 {color:#355f70;}
+.report-header p,.report-intro p {color:#67848a;}
+.report-buttons button {
+  color:#476d7b;
+  background:linear-gradient(#f2f7f0eb,#e3eeebed);
+  border-color:#b5ced0;
+  box-shadow:inset 0 1px #fffc,0 2px 7px #74939c1d;
+}
+.report-buttons button:hover {background:#f4f8f4;border-color:#90b5b6;color:#346e7e;}
+#share-report {background:linear-gradient(#9cc8d0,#70a9b9 58%,#578e9f);border-color:#6b9aa7;}
+#share-report:hover {background:linear-gradient(#add1d5,#71a5b5);}
+.panel-label {color:#538293;}
+.profile-main h3,.score-text h3 {color:#365f6b;}
+.profile-main a {color:#4c8394;}
+.profile-bio,.score-text p {color:#607d87;}
+.profile-avatar {box-shadow:0 5px 12px #62899435;}
+.profile-stats {border-color:#c7dad7;}
+.profile-stats strong {color:#3a6e7b;}
+.profile-stats small {color:#789198;}
+.score-gauge {
+  background:conic-gradient(#6aafba 0%,#99bf9f var(--progress),#c5d8d7 var(--progress));
+  box-shadow:0 0 0 1px #f7faf3,0 8px 20px #618d9535;
+}
+.score-gauge>div {background:linear-gradient(#f1f7f1,#dfede9);}
+.score-gauge strong {color:#446c78;}
+.score-badge {color:#567f60;background:#e4f0df;border-color:#b7cfad;}
+.breakdown-item {border-color:#d3e1df;}
+.breakdown-meta {color:#507484;}
+.breakdown-meta em {color:#608f99;}
+.breakdown-bar {background:#cedfdc;}
+.breakdown-bar span {background:linear-gradient(90deg,#73aeba,#95bd9f);}
+.breakdown-note {color:#799095;}
+.source-banner {
+  background:linear-gradient(113deg,#ecf6f0df,#d7e7e8ee 65%,#dcebe0dd);
+  border-color:#f1f8f1e8;
+  border-bottom-color:#aecbc9;
+  box-shadow:inset 0 2px #ffffffae,0 11px 27px #628b9624;
+}
+.source-banner::after {opacity:.54;}
+.source-banner[data-mode="gemini"] {border-color:#e5f3ec;border-bottom-color:#a6c9c9;}
+.source-banner[data-mode="rules"] {
+  background:linear-gradient(110deg,#f4f0e3e8,#e4ece5ed);
+  border-color:#e9e5d5;
+  border-bottom-color:#cbbda2;
+}
+.source-insignia {
+  background:linear-gradient(145deg,#bfdcd3,#8dbdc2,#6a9fb0);
+  box-shadow:inset 0 2px 0 #ffffffa8,0 6px 16px #628d973b;
+}
+.source-banner[data-mode="rules"] .source-insignia {background:linear-gradient(145deg,#e6d9b9,#cbb98b,#b39c72);}
+.source-kicker,.source-audit span {color:#688992;}
+.source-main h3 {color:#345f70;}
+.source-main p {color:#607e82;}
+.source-tag {
+  color:#547b63;
+  border-color:#b7cebb;
+  background:linear-gradient(#eff5e9,#dceadd);
+}
+.source-banner[data-mode="rules"] .source-tag {color:#806b46;border-color:#cec2a6;background:#f0e8d5;}
+.source-audit {border-left-color:#c4d6d4;}
+.source-audit strong {color:#476d79;}
+.feedback-panel,.report-grid .feedback-panel {border-color:#c3dbd8;background:linear-gradient(140deg,#f1f8f1f1,#daeae8ef 72%,#dcebe0e8);}
+.feedback-panel h3 {color:#345f6b;}
+.feedback-heading .panel-label {color:#548392;}
+.ai-badge {color:#527e80;background:#e1efea;border-color:#b0cfca;}
+.ai-badge[data-mode="rules"] {color:#856b46;background:#eee9db;border-color:#d3c6ac;}
+.feedback-verdict {color:#577985;}
+.feedback-method {color:#66858d;background:#eef5f1d8;border-color:#c5dad6;}
+.tone-tabs {background:linear-gradient(#dcebe7,#edf5ef);border-color:#bad2d0;}
+.tone-button {color:#6f8b90;}
+.tone-button.active {background:linear-gradient(#abd0ce,#7caeb5 55%,#6095a3);box-shadow:inset 0 1px #fff8,0 2px 7px #608c9536;}
+.feedback-quote {color:#476e74;border-color:#87b49c;background:linear-gradient(#f1f7efed,#dbeae1cf);}
+.next-step {border-top-color:#c2d7d1;}
+.next-step span {color:#5b9277;}
+.next-step p {color:#60818a;}
+.action-panel h3 span {color:#6c9c91;}
+.panel-description,.action-why {color:#688489;}
+.progress-meta {color:#6b898b;}
+.progress-meta strong {color:#548795;}
+.action-progress-track {background:#cadcd9;}
+.action-progress-track span {background:linear-gradient(90deg,#71abb9,#9ac198);}
+.action-item,.repo-item {
+  border-color:#c2d8d3;
+  background:linear-gradient(145deg,#f0f6f0e1,#e1eeeaed);
+}
+.action-item:hover {background:#f4f8f2;border-color:#9dc2b9;}
+.action-title {color:#416d76;}
+.action-check {border-color:#90b7ae;}
+.action-check:checked {background:#84ad91;border-color:#689b7a;}
+.priority {color:#94675b;background:#f2e5de;}
+.priority.medium {color:#8d7c56;background:#f3efdf;}
+.priority.low {color:#5a8491;background:#e0eced;}
+.action-how {color:#548895;}
+.action-repo {color:#659986;}
+.repo-name {color:#4d8493;}
+.repo-description,.repo-tag {color:#708992;}
+.repo-tag.language {background:#e8f2ec;border-color:#bfd5d3;color:#65818c;}
+.repo-tag.readme-yes {color:#5c9173;}
+.repo-tag.readme-no {color:#9d7575;}
+.tiny-counter,.empty-repos,.report-disclaimer {color:#758e92;}
+.loading-section {border-color:#eaf5ef;background:linear-gradient(#ebf5ee,#dcebea);box-shadow:inset 0 2px #fff8,0 12px 28px #74949c29;}
+.loading-section h2 {color:#456d7b;}
+.loading-section p {color:#718d92;}
+.loading-ring {border-color:#c2d9d3;border-top-color:#75aaba;}
+.loading-track {background:#cadcda;}
+.loading-track span {background:linear-gradient(90deg,#75acb8,#a5c99b);}
+.toast {color:#3c6d7c;border-color:#b3d0cc;background:linear-gradient(#f3f8f0,#dbeae8);box-shadow:0 11px 24px #6e8c962d;}
+@media (prefers-reduced-motion:reduce) {
+  .aero-bubble { animation:none; }
+}
