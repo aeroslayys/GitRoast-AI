@@ -230,8 +230,8 @@ export async function aiFeedback(data, analysis) {
   const primary = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
   const backup = process.env.GEMINI_BACKUP_MODEL || 'gemini-3.1-flash-lite';
   let useBackup = false;
-  for (const model of [...new Set([primary, backup])]) {
-    if (model === backup && !useBackup) break;
+  for (const [index, model] of [...new Set([primary, backup])].entries()) {
+    if (index > 0 && !useBackup) break;
     try {
       const obj = await requestGeminiModel(model, key, prompt, model === primary ? 2 : 1);
       const safe = (value, max, previous) => str(value, max).trim() || previous;
