@@ -115,6 +115,7 @@
       if (sequence === requestId) {
         notice(error.name === 'AbortError' ? 'Generation timed out. Please try again.' :
           error.message || 'Draft generation failed. Try again.', 'error');
+      }
     } finally {
       clearTimeout(timer);
       if (sequence === requestId) setBusy(false);

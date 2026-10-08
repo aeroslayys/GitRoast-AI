@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
 const js = readFileSync(new URL('../public/app.js', import.meta.url), 'utf8');
 const style = readFileSync(new URL('../public/style.css', import.meta.url), 'utf8');
@@ -80,4 +81,14 @@ test('Fix-It Studio offers labeled, editable, copyable drafts', () => {
 test('Fix-It Studio is discoverable from report actions', () => {
   assert.match(html, /href="#fixit-studio"/);
   assert.match(html, /class="fixit-quicklink"/);
+});
+
+
+test('every browser script parses, including Fix-It Studio', () => {
+  // Catch accidental syntax errors even if the Node backend itself still works.
+  for (const path of ['public/app.js', 'public/fixit.js']) {
+    assert.doesNotThrow(() => execFileSync(process.execPath, ['--check', path], {
+      cwd: new URL('..', import.meta.url), stdio: 'pipe'
+    }), path + ' must compile in a browser-compatible JS parser');
+  }
 });
