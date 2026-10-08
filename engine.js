@@ -162,6 +162,53 @@ export function fallbackFeedback(data, analysis) {
   };
 }
 
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/';
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const transient = status => status === 408 || status === 429 || status >= 500 && status <= 599;
+
+async function requestGeminiModel(model, apiKey, prompt, attempts) {
+  const body = JSON.stringify({
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 1100 }
+  });
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const response = await fetch(GEMINI_URL + encodeURIComponent(model) + ':generateContent', {
+        method: 'POST', signal: AbortSignal.timeout(11500),
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+        body
+      });
+      if (!response.ok) {
+        // Include the provider's status code only. Never log secret values or prompts.
+        const problem = await response.json().catch(() => ({}));
+        const reason = typeof problem?.error?.status === 'string' ? ' ' + problem.error.status : '';
+        const error = new Error('Gemini model ' + model + ': HTTP ' + response.status + reason);
+        error.retryable = transient(response.status);
+        error.modelFallback = error.retryable || response.status === 404;
+        throw error;
+      }
+      const payload = await response.json();
+      const output = payload.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
+      const parsed = JSON.parse(output);
+      if (typeof parsed?.verdict !== 'string' || typeof parsed?.roast !== 'string') {
+        throw new Error('Malformed AI output');
+      }
+      return parsed;
+    } catch (error) {
+      lastError = error;
+      // Fetch errors/timeouts are transient. 400/401/403 are not.
+      const mayRetry = error.retryable === true || error.name === 'TimeoutError' ||
+        error.name === 'AbortError' || error instanceof TypeError;
+      if (!mayRetry || attempt === attempts) break;
+      console.warn('Gemini transient failure: ' + model + ', attempt ' + attempt + '/' + attempts +
+        '. Retrying without logging credentials.');
+      await wait(650 * Math.pow(2, attempt - 1) + Math.floor(Math.random() * 250));
+    }
+  }
+  throw lastError;
+}
+
 export async function aiFeedback(data, analysis) {
   const fallback = fallbackFeedback(data, analysis);
   const key = process.env.GEMINI_API_KEY;
@@ -180,25 +227,24 @@ export async function aiFeedback(data, analysis) {
     'Base the nextStep on the first action. Make the verdict specific and the roast funny, not mean.',
     'EVIDENCE: ' + JSON.stringify(evidence)
   ].join('\n');
-  try {
-    const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', {
-      method: 'POST', signal: AbortSignal.timeout(18000),
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 900, thinkingConfig: { thinkingLevel: 'low' } } })
-    });
-    if (!response.ok) throw new Error('Gemini status ' + response.status);
-    const payload = await response.json();
-    const output = payload.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
-    const obj = JSON.parse(output);
-    if (typeof obj?.verdict !== 'string' || typeof obj?.roast !== 'string') throw new Error('Malformed AI output');
-    const safe = (value, max, previous) => str(value, max).trim() || previous;
-    return { source: 'gemini', headline: safe(obj.headline, 65, fallback.headline),
-      verdict: safe(obj.verdict, 250, fallback.verdict), roast: safe(obj.roast, 170, fallback.roast),
-      kind: safe(obj.kind, 170, fallback.kind), nextStep: safe(obj.nextStep, 170, fallback.nextStep) };
-  } catch (error) {
-    console.warn('Gemini unavailable; serving grounded feedback:', error.message);
-    return fallback;
+  const primary = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
+  const backup = process.env.GEMINI_BACKUP_MODEL || 'gemini-3.1-flash-lite';
+  let useBackup = false;
+  for (const model of [...new Set([primary, backup])]) {
+    if (model === backup && !useBackup) break;
+    try {
+      const obj = await requestGeminiModel(model, key, prompt, model === primary ? 2 : 1);
+      const safe = (value, max, previous) => str(value, max).trim() || previous;
+      console.info('Gemini feedback succeeded using model ' + model);
+      return { source: 'gemini', headline: safe(obj.headline, 65, fallback.headline),
+        verdict: safe(obj.verdict, 250, fallback.verdict), roast: safe(obj.roast, 170, fallback.roast),
+        kind: safe(obj.kind, 170, fallback.kind), nextStep: safe(obj.nextStep, 170, fallback.nextStep) };
+    } catch (error) {
+      console.warn('Gemini unavailable; serving grounded feedback if no model succeeds: ' + error.message);
+      useBackup = error.modelFallback === true || error.name === 'TimeoutError' ||
+        error.name === 'AbortError' || error instanceof TypeError;
+      if (!useBackup) break;
+    }
   }
+  return fallback;
 }
