@@ -24,6 +24,7 @@
   <script src="/workspace.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="ambient ambient-one" aria-hidden="true"></div>
   <div class="ambient ambient-two" aria-hidden="true"></div>
   <div class="aero-bubble bubble-a" aria-hidden="true"></div>
@@ -40,10 +41,10 @@
         <a href="#features">Why GitRoast?</a>
         <a href="https://github.com/aeroslayys/GitRoast-AI" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
       </nav>
-      <span class="top-status"><span class="live-dot"></span> SYSTEM ONLINE</span>
+      <span class="top-status"><span class="live-dot" aria-hidden="true"></span> PUBLIC PROFILE AUDITS</span>
     </header>
 
-    <main>
+    <main id="main-content">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <div class="audit-search-prompt"><strong>Another profile?</strong><span>Enter a GitHub username to run a new audit.</span></div>
@@ -63,7 +64,7 @@
           <p id="form-error" class="form-error" role="alert" hidden></p>
           <div class="trust-row"><span class="trust-icon" aria-hidden="true">✓</span> No login required <span class="separator">·</span> Public GitHub data <span class="separator">·</span> AI source always disclosed</div>
         </div>
-        <div class="hero-art" aria-label="Example of a GitRoast report">
+        <div class="hero-art" aria-hidden="true">
           <div class="art-glow" aria-hidden="true"></div>
           <div class="floating-tag tag-one"><span>✦</span> CRYSTAL-CLEAR FEEDBACK</div>
           <div class="mock-window">
@@ -90,7 +91,7 @@
         <div class="loading-track"><span></span></div>
       </section>
 
-      <section id="report" class="report-section" hidden aria-labelledby="report-title">
+      <section id="report" tabindex="-1" class="report-section" hidden aria-labelledby="report-title">
         <div class="report-header">
           <div class="report-intro">
             <div class="eyebrow">✳ YOUR AUDIT IS READY</div>

@@ -121,3 +121,18 @@ body.has-report .nav-links a[href="#how-it-works"],body.has-report .nav-links a[
  body.has-report .hero .input-wrap .primary-btn{width:100%;min-height:43px}
  body.has-report .hero .input-wrap input{font-size:16px}
 }
+
+
+/* Keyboard accessibility: visible skip navigation and honest static status. */
+.skip-link {
+  position:fixed;z-index:10000;left:18px;top:-80px;
+  padding:11px 17px;border:2px solid #28698a;border-radius:9px;
+  background:#eff8fc;color:#194c6b;font:750 15px "Segoe UI",Tahoma,sans-serif;
+  box-shadow:0 6px 20px #365d7448;
+}
+.skip-link:focus-visible {top:14px;outline:3px solid #d9f1ff;outline-offset:2px;}
+.top-status .live-dot {background:#7696a6;box-shadow:0 0 0 3px #c7dae286;}
+#audit-review:focus-visible,#report:focus-visible{outline:3px solid #2d779c;outline-offset:3px;}
+@media(prefers-reduced-motion:reduce){
+  .skip-link{transition:none;}
+}

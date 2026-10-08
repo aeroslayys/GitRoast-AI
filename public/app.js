@@ -10,6 +10,23 @@ let current = null;
 let tone = 'roast';
 let ticker = null;
 let toastTimer = null;
+let activeAudit = null;
+let auditSequence = 0;
+
+function cancelPendingAudit() {
+  ++auditSequence;
+  if (activeAudit) {
+    activeAudit.abort();
+    activeAudit = null;
+  }
+}
+
+function syncReportUrl(username) {
+  const url = new URL(window.location.href);
+  if (username) url.searchParams.set('u', username);
+  else url.searchParams.delete('u');
+  history.replaceState(history.state, '', url.pathname + url.search + url.hash);
+}
 
 function showToast(message) {
   const toast = byId('toast');
@@ -236,27 +253,40 @@ function render(data) {
     projects: data.projects.map(p => ({ name: p.name, description: p.description,
       hasReadme: p.hasReadme, readmeLength: p.readmeLength })) } }));
   report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  report.focus({ preventScroll: true });
 }
 async function analyze(username) {
+  cancelPendingAudit();
+  const requestId = auditSequence;
   clearError();
   if (!/^(?!.*--)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/.test(username)) {
-    showError('Please enter a valid GitHub username (letters, numbers and single hyphens).'); return;
+    stopLoading();
+    showError('Please enter a valid GitHub username (letters, numbers and single hyphens).');
+    return;
   }
+  const controller = new AbortController();
+  activeAudit = controller;
   showLoading();
+  const timeout = setTimeout(() => controller.abort(), 45000);
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 45000);
-    let response;
-    try { response = await fetch('/api/analyze?username=' + encodeURIComponent(username), { signal: controller.signal }); }
-    finally { clearTimeout(timeout); }
+    const response = await fetch('/api/analyze?username=' + encodeURIComponent(username), { signal: controller.signal });
+    if (requestId !== auditSequence || controller.signal.aborted) return;
     const body = await response.json();
+    if (requestId !== auditSequence || controller.signal.aborted) return;
     if (!response.ok) throw new Error(body.error || 'Could not analyze that account.');
     render(body);
-    history.replaceState(null, '', '?u=' + encodeURIComponent(body.user.login));
+    syncReportUrl(body.user.login);
   } catch (error) {
+    if (requestId !== auditSequence) return;
     showError(error.name === 'AbortError' ? 'That took too long. Please try again.' : error.message || 'Something went wrong.');
     form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  } finally { stopLoading(); }
+  } finally {
+    clearTimeout(timeout);
+    if (requestId === auditSequence) {
+      activeAudit = null;
+      stopLoading();
+    }
+  }
 }
 form.addEventListener('submit', event => {
   event.preventDefault();
@@ -276,8 +306,16 @@ byId('action-more').addEventListener('click',()=>{
 byId('tone-roast').addEventListener('click', () => { tone = 'roast'; updateTone(); });
 byId('tone-kind').addEventListener('click', () => { tone = 'kind'; updateTone(); });
 byId('new-search').addEventListener('click', () => {
-  report.hidden = true; document.body.classList.remove('has-report'); current = null; clearError(); input.focus();
+  cancelPendingAudit();
+  stopLoading();
+  report.hidden = true;
+  document.body.classList.remove('has-report');
+  current = null;
+  input.value = '';
+  clearError();
+  syncReportUrl(null);
   window.dispatchEvent(new Event('gitroast:reset'));
+  input.focus();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 byId('share-report').addEventListener('click', async () => {

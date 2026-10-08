@@ -130,6 +130,8 @@ curl http://localhost:8080/health
 
 ### Optional Gemini configuration
 
+The homepage's profile-audit badge describes the public-data service; it does **not** claim GitHub or Gemini has been health-checked. Audit requests cancel stale responses, and starting a new audit clears stale shared-profile URLs.
+
 The app runs in **rules-based mode without an API key**. To enable Gemini-generated feedback and on-demand writing drafts, provide a Gemini API key as a **server-side environment variable**:
 
 ~~~bash
