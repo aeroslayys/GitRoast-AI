@@ -12,6 +12,7 @@ const requests = new Map();
 const fixCache = new Map();
 const doctorCache = new Map();
 const doctorRequests = new Map();
+const progressRequests = new Map();
 const fixRequests = new Map();
 const TTL = 10 * 60 * 1000;
 const pages = {
@@ -46,6 +47,37 @@ export async function handle(req, res) {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'");
   if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed.' });
+  if (url.pathname === '/api/progress') {
+    const username=(url.searchParams.get('username')||'').trim();
+    if (!validUsername(username)) return json(res,400,{error:'Enter a valid GitHub username.'});
+    // A deliberate, uncached refresh of public metrics only. No Gemini request is made.
+    const ip=req.socket.remoteAddress||'unknown',now=Date.now();
+    if(progressRequests.size>1000)for(const [k,v] of progressRequests)if(v.until<=now)progressRequests.delete(k);
+    const existing=progressRequests.get(ip);
+    if(!existing||existing.until<=now)progressRequests.set(ip,{count:1,until:now+3600000});
+    else if(++existing.count>6)return json(res,429,{
+      error:'Progress recheck limit reached. Please try again in an hour.'
+    });
+    try {
+      const profile=await collectProfile(username);
+      const analysis=scoreProfile(profile);
+      return json(res,200,{
+        username:profile.user.login,
+        analyzedAt:profile.analyzedAt,
+        analysis:{
+          score:analysis.score,
+          categories:analysis.categories.map(({name,score,max})=>({name,score,max})),
+          facts:analysis.facts
+        },
+        scoreVersion:1,
+        source:'github-public-data'
+      });
+    } catch(error) {
+      const status=error instanceof ApiError?error.status:500;
+      console.warn('Progress recheck failed:',error.message);
+      return json(res,status,{error:status===500?'Could not refresh profile metrics right now.':error.message});
+    }
+  }
   if (url.pathname === '/api/readme-doctor') {
     const username=(url.searchParams.get('username')||'').trim();
     const repository=url.searchParams.get('repo')||'';

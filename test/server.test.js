@@ -134,3 +134,44 @@ test('README Doctor HTTP route returns public evidence without exposing private 
     globalThis.fetch=original;
   }
 });
+
+test('progress recheck reads fresh public metrics and never calls Gemini',async()=>{
+  const original=globalThis.fetch,oldKey=process.env.GEMINI_API_KEY;
+  process.env.GEMINI_API_KEY='test-key-not-real';
+  let counter=0;
+  const calls=[];
+  globalThis.fetch=async (address,options)=>{
+    const url=String(address);
+    if(!url.startsWith('https://api.github.com'))return original(address,options);
+    calls.push(url);
+    if(url.endsWith('/users/fresh-student'))return {ok:true,json:async()=>({
+      type:'User',login:'fresh-student',name:'Fresh',bio:counter++?'Updated bio':'',
+      avatar_url:'',html_url:'https://github.com/fresh-student',followers:0,public_repos:0
+    })};
+    if(url.includes('/users/fresh-student/repos?'))return {ok:true,json:async()=>[]};
+    throw Error('Unexpected external request '+url);
+  };
+  const app=createApp();
+  await new Promise(r=>app.listen(0,'127.0.0.1',r));
+  const base='http://127.0.0.1:'+app.address().port;
+  try{
+    const bad=await original(base+'/api/progress?username=bad%2Fuser');
+    assert.equal(bad.status,400);
+    const first=await original(base+'/api/progress?username=fresh-student');
+    const second=await original(base+'/api/progress?username=fresh-student');
+    assert.equal(first.status,200);assert.equal(second.status,200);
+    const before=await first.json(),after=await second.json();
+    assert.equal(before.source,'github-public-data');
+    assert.equal(before.scoreVersion,1);
+    assert.equal(after.scoreVersion,1);
+    assert.ok(after.analysis.score>before.analysis.score);
+    assert.deepEqual(after.analysis.categories.map(x=>x.name),before.analysis.categories.map(x=>x.name));
+    assert.equal(calls.length,4);
+    assert.ok(calls.every(u=>u.startsWith('https://api.github.com/')));
+    assert.ok(!JSON.stringify(after).includes('GEMINI'));
+  }finally{
+    await new Promise(r=>app.close(r));
+    globalThis.fetch=original;
+    if(oldKey===undefined)delete process.env.GEMINI_API_KEY;else process.env.GEMINI_API_KEY=oldKey;
+  }
+});
