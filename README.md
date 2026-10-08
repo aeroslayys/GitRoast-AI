@@ -133,6 +133,8 @@ The workshop offers two related tools for the **same selected repository**:
 
 Snapshots are stored in **browser localStorage**, separately for each username—not in a shared database. Clearing site data or switching browsers removes access to that local history. A fresh progress recheck does **not** automatically replace the main AI report; run another audit for that.
 
+See the [Architecture and Code Quality guide](docs/ARCHITECTURE.md) for service boundaries, stable contracts, request quotas, tests and known limitations.
+
 ## 🛠️ Technology
 
 | Layer | Technologies |

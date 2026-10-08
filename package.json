@@ -4,6 +4,12 @@
   "private": true,
   "type": "module",
   "description": "A kind-but-savage GitHub portfolio reviewer",
-  "engines": { "node": ">=20" },
-  "scripts": { "start": "node server.js", "test": "node --test" }
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test",
+    "check": "node scripts/check-syntax.js && npm test"
+  }
 }

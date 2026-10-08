@@ -117,3 +117,52 @@ test('mobile: usable audit and keyboard-accessible tabs at 390px', async ({ page
   }
   expect(sizes.page).toBeLessThanOrEqual(sizes.viewport + 5);
 });
+
+
+test('deep-linked audit shows detailed points, planner and repository evidence', async ({ page }) => {
+  await page.unroute('**/api/analyze?**');
+  await page.route('**/api/analyze?**', route => {
+    const data=report('aeroslayys');
+    data.analysis.scoreDetails=[{
+      name:'Profile basics',score:5,max:20,limitation:'Public evidence only.',
+      signals:[{id:'bio',title:'Profile bio',earned:0,max:10,evidence:'No public bio found.'}]
+    }];
+    data.analysis.scorePolicy=['Follower counts do not earn points.'];
+    data.analysis.actions[0].category='Profile basics';
+    data.analysis.actions[0].impactEstimate=10;
+    data.analysis.plan={
+      scan:[{time:'0–5s',title:'Identity',observation:'No bio found.'}],
+      week:[{day:1,title:'Write a bio',detail:'Describe your focus.',evidence:[]}],
+      estimateDisclaimer:'Estimates are not actual scores.'
+    };
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)});
+  });
+  await page.route('**/api/repo-evidence?**', route=>route.fulfill({
+    status:200,contentType:'application/json',
+    body:JSON.stringify({
+      repository:'demo-app',branch:'main',truncated:false,scannedPaths:4,
+      findings:[{id:'readme',label:'README',status:'found',confidence:'medium',paths:['README.md']}],
+      roles:[{id:'frontend',label:'Frontend developer',score:75,coverage:100,confidence:'medium',
+        criteria:[{label:'frontend',weight:40,status:'found',paths:['src/App.js']}]}],
+      limitation:'Filename evidence does not prove functioning software.'
+    })
+  }));
+  await page.goto('/?u=aeroslayys');
+  await expect(page.locator('#report')).toBeVisible();
+  await expect(page.locator('#username')).toHaveValue('aeroslayys');
+  await page.locator('#breakdown-list .score-detail').first().locator('summary').click();
+  await expect(page.locator('#breakdown-list')).toContainText('Profile bio');
+  await page.locator('#score-policy summary').click();
+  await expect(page.locator('#score-policy-list')).toContainText('Follower counts');
+  await page.locator('#audit-tab-improve').click();
+  await expect(page.locator('#plan-score-current')).toHaveText('25 / 100');
+  await page.locator('#plan-selection-list input').first().check();
+  await expect(page.locator('#plan-score-preview')).toHaveText('35 / 100');
+  await expect(page.locator('#plan-week-list')).toContainText('Write a bio');
+  await expect(page.locator('#evidence-inspect')).toBeEnabled();
+  await page.locator('#evidence-inspect').click();
+  await expect(page.locator('#evidence-summary')).toContainText('4 public file paths');
+  await page.locator('#evidence-role').selectOption('frontend');
+  await expect(page.locator('#evidence-role-result')).toContainText('75/100');
+  await expect(page.locator('#evidence-limitation')).toContainText('Filename evidence');
+});
