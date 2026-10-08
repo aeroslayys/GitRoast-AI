@@ -1,109 +1,222 @@
+<div align="center">
+
 # 🔥 GitRoast AI
 
-**Your code speaks. We translate.** A hackathon-ready GitHub profile reviewer that combines objective public-profile signals, Gemini-powered recruiter feedback, lighthearted roasts, and a prioritized improvement checklist.
+### Your GitHub deserves a glow-up.
 
-![Node 20+](https://img.shields.io/badge/Node.js-20%2B-43853D) ![No runtime dependencies](https://img.shields.io/badge/Runtime%20deps-0-9c80ef) ![Cloud Run ready](https://img.shields.io/badge/Deploy-Google%20Cloud%20Run-5285ff)
+**An honest, constructive GitHub portfolio reviewer for students and developers.**  
+Turn public GitHub data into a recruiter-style first impression, actionable fixes, and a way to measure progress.
 
-## What it does
+[**🚀 Try GitRoast AI**](https://gitroast-ai-494460734333.asia-south1.run.app) · [**💻 Source code**](https://github.com/aeroslayys/GitRoast-AI) · [**✅ CI tests**](https://github.com/aeroslayys/GitRoast-AI/actions)
 
-1. Enter any **public personal GitHub username** (no sign-in).
-2. The Node.js backend reads the person's public profile and original, unarchived repositories using GitHub REST API.
-3. It checks README files for up to **eight featured projects** and scores five transparent categories: profile basics (20), project clarity (25), documentation (30), recent work (15), and discoverability (10).
-4. **Gemini** writes a recruiter-style verdict, supportive feedback, and a playful, non-cruel roast. If no key is configured, the app provides accurate rules-based feedback and marks it as *data-based* rather than pretending AI was used.
-5. Users can switch between roast and kind modes, check off actionable fixes, copy a text summary, download a report, and share a profile URL like `?u=your-username`.
-6. **README Doctor** inspects the selected repository’s public README on demand and lists seven observable documentation signals with priority fixes. Unavailable README files are never labeled missing; no Gemini request is required.
-7. **Before & After Progress Tracker** lets students save a baseline in their own browser and run a fresh, Gemini-free recheck of public GitHub scoring signals. It compares the five score categories and observable repository metrics; saved baselines never sync to the server.
-8. **Fix-It Studio** (on demand) drafts an editable GitHub bio, featured repository description, and README Markdown outline using public metadata. If Gemini is unavailable, suggestions are explicitly labeled rules-based templates. A `.md` download is provided.
+![Node.js](https://img.shields.io/badge/Node.js-20%2B-387c61?style=flat-square)
+![Dependencies](https://img.shields.io/badge/runtime%20dependencies-0-4d7ca0?style=flat-square)
+![Cloud Run](https://img.shields.io/badge/hosted%20on-Google%20Cloud%20Run-5c86a6?style=flat-square)
+[![Tests](https://github.com/aeroslayys/GitRoast-AI/actions/workflows/test.yml/badge.svg)](https://github.com/aeroslayys/GitRoast-AI/actions/workflows/test.yml)
 
-### Streamlined interface
+</div>
 
-The report now has three stages: **Review** (score and recruiter verdict), **Improve** (one Glow-Up Plan plus an integrated README check and Fix-It writing workshop using one repository selector), and **Track** (before/after progress). Featured projects are collapsible, and the landing-page marketing sections hide when a report is open. Existing checklists, Gemini source badges, and local progress baselines are preserved.
+---
 
-### Design principles
+## 🌱 About the project
 
-- **Constructive, not cruel.** Comment on observable portfolio presentation, not personal worth.
-- **Evidence first.** Code quality, talent and employability cannot be measured from API metadata alone. The score is explicitly a heuristic, never a hiring prediction.
-- **Honest limitations.** Up to 300 repos are queried, archived/forked projects are excluded, and README checks are sampled. Unknown README results are not called missing.
-- **Progress is opt-in and local.** `GET /api/progress?username=...` recalculates public score signals without Gemini; at most six fresh rechecks per hour per IP. Baselines and comparisons live in browser localStorage, not Cloud Run or a database.
-- **No keys on the client.** Gemini and optional GitHub credentials live only in the Node.js backend.
-- **README Doctor is evidence-based.** It uses a separate, rate-limited GET endpoint, never runs project code or invents installation commands, and does not expose private repos even when an optional server token is connected.
-- **No GitHub writes.** Fix-It Studio only reads public data; review, edit and copy drafts manually. Generations are opt-in, cached for ten minutes, and limited to 12 attempts per connection per hour.
+Students are told to *“build a GitHub portfolio”*—but rarely shown what makes one easy to understand. Empty bios, vague repository descriptions, missing READMEs, and projects without demos can hide genuinely interesting work.
 
-## Stack
+**GitRoast AI** reviews a real **public personal GitHub profile** and answers three questions:
 
-- Frontend: semantic HTML, custom responsive CSS, vanilla JavaScript (no build tools, no CDN JavaScript)
-- Backend: Node.js 20+ built-in HTTP server, no npm dependencies
-- GitHub REST API: profiles, repos, README metadata
-- AI: Google Gemini GenerateContent API, default `gemini-3.5-flash-lite`
-- Hosting: Google Cloud Run source deployment
+- **What would someone notice in a quick profile scan?**
+- **What is making this portfolio hard to understand?**
+- **What can its owner improve next, and did those changes help?**
 
-## Run locally
+It combines a **transparent, rules-based score** with **optional Google Gemini feedback** that is witty without being mean. The goal is better presentation, **not** to judge someone's skills, personality, or chances of being hired.
 
-```bash
-# clone and enter the repo
+The interface uses a **muted Windows Vista Aero / Frutiger Aero aesthetic**, with frosted-glass panels, soft blue-grey colors, and responsive layouts.
+
+## ✨ The experience: Review → Improve → Track
+
+Instead of a long stack of separate dashboards, the report has **three tabs**:
+
+| Stage | What you get |
+| --- | --- |
+| **01 · Review** | Profile summary, **0–100 portfolio-presentation score**, five-category breakdown, recruiter-style verdict, playful roast / kind mode, and an explicit **Gemini vs. rules** source label. |
+| **02 · Improve** | Prioritized **Glow-Up Plan**, a collapsible list of sampled projects, and **one workshop** that brings README Doctor and Fix-It Studio together under one repository selector. |
+| **03 · Track** | Save a baseline, recheck public GitHub metrics without Gemini, and compare scores and visible signals **before and after** changes. |
+
+### Review — a first impression backed by evidence
+
+Paste a GitHub username—**no GitHub login required**. The server reads public profile information and original, non-archived repositories via the GitHub REST API.
+
+The **deterministic** score totals 100 points:
+
+| Category | Maximum | What it measures |
+| --- | ---: | --- |
+| Profile basics | 20 | Name, bio, website link |
+| Project clarity | 25 | Original repositories and useful descriptions |
+| Documentation | 30 | Presence and depth of **sampled** READMEs |
+| Recent work | 15 | Recent public repository activity |
+| Discoverability | 10 | Repository topics and demo/homepage links |
+| **Total** | **100** | **A presentation heuristic—not a hiring prediction** |
+
+Gemini, when configured and available, writes the headline, verdict, roast, encouragement, and next-step suggestion. **Gemini never sets the numerical score.** If AI is unavailable, evidence-based feedback is shown with a **rules-based** label.
+
+You can also **share a profile-specific report link**, copy a text summary, or download the report.
+
+### Improve — one plan, one workshop
+
+The **Glow-Up Plan** prioritizes specific improvements instead of giving generic advice. Check off tasks as you work; the first few are shown up front to reduce clutter.
+
+The workshop offers two related tools for the **same selected repository**:
+
+**⌕ README Doctor**
+
+- Examines a public repository's README **on demand**.
+- Checks seven visible documentation signals: overview, features, setup, usage, screenshots/demo, current status, and license information.
+- Distinguishes **found**, **needs improvement**, **not detected**, and **unavailable** information.
+- Identifies a practical first fix, with a copyable improvement plan.
+- Uses deterministic checks; **no Gemini call** is needed.
+
+**✦ Fix-It Studio**
+
+- Creates editable drafts for a **GitHub bio**, repository description, and README outline.
+- Uses **public profile and repository metadata** as evidence.
+- Calls Gemini only when requested; otherwise, offers clearly labeled rules-based templates.
+- Provides **copy** and **README Markdown download** options.
+- Uses placeholders for unknown details. **Always verify suggested claims, commands, and features before publishing.**
+
+**Nothing is automatically changed on GitHub.** The user remains in control of what they copy, edit, or publish.
+
+### Track — see whether your improvements worked
+
+1. Analyze your profile and **save a baseline**.
+2. Update the bio, READMEs, descriptions, topics, or project demos on GitHub.
+3. Select **Recheck GitHub now** to get fresh public-profile metrics, without Gemini.
+4. Compare your total score, five categories, and visible repository signals.
+
+Snapshots are stored in **browser localStorage**, separately for each username—not in a shared database. Clearing site data or switching browsers removes access to that local history. A fresh progress recheck does **not** automatically replace the main AI report; run another audit for that.
+
+## 🛠️ Technology
+
+| Layer | Technologies |
+| --- | --- |
+| Frontend | HTML5, responsive CSS, vanilla JavaScript |
+| Visual design | CSS glassmorphism, SVG scenery, Vista / Frutiger Aero-inspired styling |
+| Backend | Node.js 20+ built-in HTTP server; **zero runtime npm dependencies** |
+| Public data | GitHub REST API |
+| AI feedback & optional writing drafts | Google Gemini GenerateContent API |
+| Hosting | Google Cloud Run with GitHub-connected build/deployment |
+| Tests | Node.js built-in test runner + GitHub Actions |
+
+There is **no frontend framework, database, Dockerfile, or bundled SDK** required to run the project.
+
+## 🚀 Getting started
+
+**Requirements:** Node.js 20+ and internet access for public GitHub requests.
+
+~~~bash
 git clone https://github.com/aeroslayys/GitRoast-AI.git
 cd GitRoast-AI
 
-# no npm install necessary: 0 runtime dependencies
+# No npm install needed: no runtime packages
 npm start
-# open http://localhost:8080
-```
+~~~
 
-Without a Gemini key, the app **still fully works**, but returns rules-based feedback rather than Gemini wording. For actual AI mode, set the environment variable (never commit a real key):
+Open **http://localhost:8080**.
 
-```bash
-# macOS/Linux
+For a basic health check:
+
+~~~bash
+curl http://localhost:8080/health
+~~~
+
+### Optional Gemini configuration
+
+The app runs in **rules-based mode without an API key**. To enable Gemini-generated feedback and on-demand writing drafts, provide a Gemini API key as a **server-side environment variable**:
+
+~~~bash
+# macOS / Linux
 export GEMINI_API_KEY="YOUR_API_KEY"
 npm start
-```
+~~~
 
-A `.env.example` is provided as a reference. Node does not automatically load `.env` files. To load a locally created `.env` with Node 20+ use `node --env-file=.env server.js` (or export variables from your shell). Set `GITHUB_TOKEN` optionally for a higher GitHub REST API rate limit, especially during a hackathon demo. **Never put API keys in the browser, README, or GitHub commits.** The server retries transient Gemini failures and can fall back to `gemini-3.1-flash-lite` before using clearly labeled data-based feedback.
+You can also create your own local `.env` file using `.env.example` as a guide, then start Node with `node --env-file=.env server.js`. The normal `npm start` command does **not** automatically load `.env`.
 
-## Deploy on Google Cloud Run
+| Variable | Required? | Purpose |
+| --- | --- | --- |
+| `GEMINI_API_KEY` | No | Enables Gemini feedback and optional Fix-It Studio generation |
+| `GEMINI_MODEL` | No | Primary Gemini model; default: `gemini-3.5-flash-lite` |
+| `GEMINI_BACKUP_MODEL` | No | Backup model used for eligible failures; default: `gemini-3.1-flash-lite` |
+| `GITHUB_TOKEN` | No | Raises GitHub API request limits; stored **only on the server** |
+| `PORT` | No | HTTP port; defaults to `8080` |
 
-1. Install the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install), create/select a Google Cloud project, enable billing, and sign in.
-2. In Google Cloud Console, enable Cloud Run, Cloud Build, Artifact Registry and Secret Manager APIs as required.
-3. Create a Secret Manager secret named **`gitroast-gemini`** holding your Gemini API key, and grant your Cloud Run runtime service account **Secret Manager Secret Accessor** on that secret.
-4. From the repository folder run:
+Model access and free-tier eligibility depend on your Google AI project. If a Gemini request fails, the app can fall back to **clearly labeled rules-based feedback or drafts**.
 
-```bash
+**Never commit secrets** or place a Gemini/GitHub token in frontend JavaScript.
+
+## ☁️ Deployment
+
+**Live app:** [GitRoast AI on Google Cloud Run](https://gitroast-ai-494460734333.asia-south1.run.app)
+
+The project is set up for **Cloud Run source deployment** and **GitHub-connected continuous builds** from `main`. The Node server listens on `0.0.0.0` and honors the `PORT` environment variable supplied by Cloud Run.
+
+For your own deployment:
+
+1. Create a Google Cloud project, enable billing, and enable the necessary Cloud Run, Cloud Build, Artifact Registry, and Secret Manager APIs.
+2. Store your Gemini API key in **Secret Manager**.
+3. Give the Cloud Run **runtime service account** the **Secret Manager Secret Accessor** role on that secret.
+4. Deploy this repository as a Cloud Run source service, or configure a GitHub-connected Cloud Build trigger.
+
+Example manual source deployment:
+
+~~~bash
 gcloud auth login
-gcloud config set project YOUR_GOOGLE_CLOUD_PROJECT_ID
+gcloud config set project YOUR_PROJECT_ID
 
 gcloud run deploy gitroast-ai \
   --source . \
   --region asia-south1 \
   --allow-unauthenticated \
-  --set-secrets GEMINI_API_KEY=gitroast-gemini:latest \
-  --set-env-vars GEMINI_MODEL=gemini-3.5-flash-lite
-```
+  --set-secrets GEMINI_API_KEY=gitroast-gemini:latest
+~~~
 
-Cloud Run's source deployment uses Google Cloud buildpacks automatically; **no Dockerfile or build step is needed**. The server binds to `0.0.0.0` and the injected `PORT` variable. The resulting `https://...run.app` URL is your Cloud Run submission link.
+The name `gitroast-gemini` in this example assumes you created a secret with that name. Leave out `--set-secrets` if you want to deploy **rules-only mode**.
 
-If you want to demo first without Gemini, omit `--set-secrets` and `--set-env-vars`, and the app will explicitly label feedback as data-based. For a higher GitHub API rate limit, provision an additional secret for `GITHUB_TOKEN` and map it as `GITHUB_TOKEN=YOUR_SECRET:latest`.
+Cloud Run, Cloud Build, Secret Manager, and Gemini may incur **usage-based charges** depending on free tiers, quotas, and billing configuration.
 
-**Note:** Cloud Run and AI API usage can incur costs. Configure billing budgets and API quotas before making the service public.
+## 🧪 Testing
 
-## Testing
-
-```bash
+~~~bash
 npm test
-```
+~~~
 
-The tests cover GitHub username validation, score bounds and breakdown consistency, actionable suggestions for empty profiles, unknown README handling, mocked public GitHub API access, and Gemini 503 retry/fallback behavior. The static page and API route can also be smoke-tested with `curl http://localhost:8080/health`.
+The [GitHub Actions workflow](.github/workflows/test.yml) runs the test suite on pushes to `main` and pull requests. Tests cover profile validation, deterministic scoring, GitHub API handling, Gemini success/fallback, README Doctor, Fix-It Studio, progress tracking, browser event flows, and static asset serving.
 
-## Repository size
+## 🔒 Privacy, fairness & limitations
 
-There are **no runtime npm dependencies** and no heavy images/fonts committed. The repo contains just source files, a README, and tests. `.gitignore` and `.gcloudignore` exclude caches, secrets, and local dependencies.
+- **Public data only.** The analyzer is intended for public personal GitHub profiles; private repository contents are not part of the report.
+- **No login or GitHub write access.** The app doesn't edit, star, or commit to users' repositories.
+- **No predictive hiring claims.** Scores describe visible portfolio presentation, not ability or employability.
+- **README sampling is limited.** The main report queries up to 300 repositories and samples READMEs for up to eight featured projects. README Doctor checks selected public README text on demand rather than running or validating project code.
+- **Visible AI provenance.** Each report or writing draft identifies whether Gemini or deterministic rules produced it.
+- **Some limits apply.** GitHub API quotas, caching, temporary API failures, and server request limits can affect availability. Normal reports are cached for approximately 10 minutes; progress rechecks request fresh metrics.
+- **Local-only progress.** Baselines and progress comparisons remain in the browser. They are not portable across devices unless manually copied.
+- **AI drafts require review.** Generated language can be inaccurate; bracketed placeholders signal missing evidence.
 
-## Agent-assisted build disclosure
+## 🤖 AI-assisted development
 
-The initial implementation, UI, API adapter, audit heuristic, test suite, and deployment setup were created with help from an AI coding assistant. The scoring formulas are deterministic and documented in `engine.js`, not invented by the LLM. Feedback generation uses Gemini only when `GEMINI_API_KEY` is configured. Validate the application against live GitHub accounts after deployment and document subsequent manual adjustments in commits.
+GitRoast AI was built with help from an **AI coding assistant** and uses **Gemini at runtime** for optional feedback and writing suggestions. The audit score itself is deterministic and implemented in [`engine.js`](engine.js). Source code, scoring rules, and tests are available in this repository.
 
-## Constraints and future ideas
+## 💡 The idea behind GitRoast
 
-GitHub API unauthenticated calls are rate limited; repeated reports are cached for ten minutes and the server limits requests per connection. In-memory cache and checked-off tasks are per-process/browser (not shared across Cloud Run instances). GitHub REST does not expose a reliable pinned-project list here, so the app ranks featured projects using observable metadata instead. Potential extensions: GitHub OAuth, authenticated repo analysis, an AI README coach, exportable social card, and richer trend tracking.
+**A useful roast should end with a fix.**
+
+GitRoast AI exists to help students turn unfinished-looking GitHub profiles into clearer evidence of what they've actually built—without gatekeeping, needless negativity, or pretending a single score can define a developer.
 
 ---
 
-Made for the hackathon · Public data only · Built to make GitHub profiles better, not to judge people.
+<div align="center">
+
+**Built for better portfolios, one commit at a time.**
+
+[**Open the app ↗**](https://gitroast-ai-494460734333.asia-south1.run.app)
+
+</div>
