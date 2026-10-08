@@ -136,3 +136,9 @@ test('report view replaces the large hero with a compact functional search', () 
   assert.match(compact, /body\.has-report \.search-form/);
   assert.match(compact, /@media\(max-width:640px\)/);
 });
+
+test('homepage omits the redundant decorative perspective bar', () => {
+  assert.doesNotMatch(html, /FRESH PERSPECTIVE/);
+  assert.doesNotMatch(html, /class="section-rule"/);
+  assert.match(html, /id="how-it-works"/);
+});
