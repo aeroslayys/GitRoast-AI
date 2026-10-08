@@ -3,18 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0c0b13">
+  <meta name="theme-color" content="#b8eeff">
   <meta name="description" content="GitRoast AI reviews your public GitHub profile like a recruiter: honest portfolio scoring, useful fixes, and lighthearted roasts.">
   <title>GitRoast AI — Your code speaks. We translate.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/aero.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
   <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="aero-bubble bubble-a" aria-hidden="true"></div>
+  <div class="aero-bubble bubble-b" aria-hidden="true"></div>
+  <div class="aero-bubble bubble-c" aria-hidden="true"></div>
   <div class="shell">
     <header class="topbar">
       <a href="/" class="brand" aria-label="GitRoast AI home">
@@ -32,9 +37,9 @@
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <div class="eyebrow"><span class="sparkle">✳</span> THE RECRUITER'S FIRST IMPRESSION, UNCENSORED</div>
-          <h1 id="hero-title">Your code speaks.<br><span class="gradient-text">We translate.</span></h1>
-          <p class="hero-description">Your GitHub profile gets about 30 seconds to make an impression. Get the honest review, the playful roast, and a game plan to make it impossible to ignore.</p>
+          <div class="eyebrow"><span class="sparkle">✳</span> WELCOME TO YOUR PORTFOLIO GLOW-UP</div>
+          <h1 id="hero-title">Make your code<br><span class="gradient-text">shine brighter.</span></h1>
+          <p class="hero-description">A refreshing reality check for your GitHub. Discover what recruiters notice, get a playful roast, and turn every rough edge into your next glow-up.</p>
           <form id="analyze-form" class="search-form" autocomplete="off">
             <label for="username" class="visually-hidden">GitHub username</label>
             <div class="input-wrap">
@@ -50,7 +55,7 @@
         </div>
         <div class="hero-art" aria-label="Example of a GitRoast report">
           <div class="art-glow" aria-hidden="true"></div>
-          <div class="floating-tag tag-one"><span>✦</span> RECRUITER VIEW</div>
+          <div class="floating-tag tag-one"><span>✦</span> CRYSTAL-CLEAR FEEDBACK</div>
           <div class="mock-window">
             <div class="window-top"><span class="traffic"><i></i><i></i><i></i></span><span class="window-title">profile_audit.exe</span><span class="top-dots">•••</span></div>
             <div class="mock-body">
@@ -63,11 +68,11 @@
               <div class="mock-footer"><span>✳ 5 improvements found</span><span>GITROAST AI</span></div>
             </div>
           </div>
-          <div class="floating-tag tag-two"><span>✓</span> BRUTALLY USEFUL</div>
+          <div class="floating-tag tag-two"><span>✓</span> GROW SOMETHING GREAT</div>
         </div>
       </section>
 
-      <div class="section-rule" aria-hidden="true"><span>// REAL DATA. REAL FEEDBACK. ZERO FLUFF.</span><span>✳</span></div>
+      <div class="section-rule" aria-hidden="true"><span>✦ FRESH PERSPECTIVE. REAL DATA. MORE CONFIDENT CODE.</span><span>✳</span></div>
 
       <section id="loading" class="loading-section" hidden aria-live="polite">
         <div class="loading-ring"></div>
@@ -116,8 +121,8 @@
         <p id="report-disclaimer" class="report-disclaimer"></p>
       </section>
 
-      <section id="how-it-works" class="steps-section"><div class="section-heading"><span class="eyebrow">THE PROCESS</span><h2>Three steps to a <span class="gradient-text">better profile.</span></h2><p>Think of it as a pull request for your personal brand.</p></div><div class="feature-grid"><article class="feature-card"><span class="feature-number">01</span><div class="feature-icon">⌘</div><h3>Drop your username</h3><p>We read your public profile and original repositories using GitHub's API. No login, no passwords.</p></article><article class="feature-card"><span class="feature-number">02</span><div class="feature-icon">◈</div><h3>Face the review</h3><p>Get a transparent breakdown, a recruiter-style verdict, and a roast that punches up, not down.</p></article><article class="feature-card"><span class="feature-number">03</span><div class="feature-icon">↗</div><h3>Make the next commit</h3><p>Fix what matters: descriptions, READMEs, live demos, and how you present your best work.</p></article></div></section>
-      <section id="features" class="bottom-banner"><div><span class="eyebrow">BUILT FOR BUILDERS</span><h2>Great code deserves<br><span class="gradient-text">a great first impression.</span></h2><p>Your profile doesn't need to be perfect. It needs to tell your story.</p></div><a href="#hero-title" class="primary-btn bottom-cta">Get your roast <span aria-hidden="true">↗</span></a></section>
+      <section id="how-it-works" class="steps-section"><div class="section-heading"><span class="eyebrow">THE PROCESS</span><h2>Three steps to a <span class="gradient-text">better profile.</span></h2><p>Think of it as a pull request for your personal brand.</p></div><div class="feature-grid"><article class="feature-card"><span class="feature-number">01</span><div class="feature-icon">⌘</div><h3>Drop your username</h3><p>We read your public profile and original repositories using GitHub's API. No login, no passwords.</p></article><article class="feature-card"><span class="feature-number">02</span><div class="feature-icon">◈</div><h3>Face the review</h3><p>See exactly where you shine. Gemini adds witty, constructive feedback whenever available — never hidden behind mystery labels.</p></article><article class="feature-card"><span class="feature-number">03</span><div class="feature-icon">↗</div><h3>Make the next commit</h3><p>Fix what matters: descriptions, READMEs, live demos, and how you present your best work.</p></article></div></section>
+      <section id="features" class="bottom-banner"><div><span class="eyebrow">FUTURE LOOKS BRIGHT</span><h2>Let your best work<br><span class="gradient-text">see the light of day.</span></h2><p>Your profile doesn't need to be perfect. It needs to tell your story.</p></div><a href="#hero-title" class="primary-btn bottom-cta">Get your roast <span aria-hidden="true">↗</span></a></section>
     </main>
     <footer><div class="footer-brand">✳ GitRoast<span>.AI</span></div><p>Constructive criticism. Served slightly toasted.</p><div>Made for the hackathon <span>·</span> GitHub data + Gemini when available</div></footer>
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>

@@ -14,6 +14,12 @@ test('serves health check, homepage, stylesheet and rejects malformed names', as
     const home = await fetch(url);
     assert.equal(home.status, 200);
     assert.match(await home.text(), /GitRoast AI/);
+    const aero = await fetch(url + '/aero.css');
+    assert.equal(aero.status, 200);
+    assert.match(await aero.text(), /Frutiger Aero/);
+    const scene = await fetch(url + '/aero-landscape.svg');
+    assert.equal(scene.status, 200);
+    assert.match(scene.headers.get('content-type'), /image\/svg\+xml/);
     const css = await fetch(url + '/style.css');
     assert.equal(css.status, 200);
     assert.match(css.headers.get('content-type'), /text\/css/);
