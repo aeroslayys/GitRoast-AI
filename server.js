@@ -4,11 +4,14 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { collectProfile, scoreProfile, aiFeedback, validUsername, ApiError } from './engine.js';
 import { generateFixes } from './fixit.js';
+import { inspectPublicReadme } from './readme-doctor.js';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const cache = new Map();
 const requests = new Map();
 const fixCache = new Map();
+const doctorCache = new Map();
+const doctorRequests = new Map();
 const fixRequests = new Map();
 const TTL = 10 * 60 * 1000;
 const pages = {
@@ -21,7 +24,9 @@ const pages = {
   '/favicon.svg': ['favicon.svg', 'image/svg+xml'],
   '/app.js': ['app.js', 'text/javascript; charset=utf-8'],
   '/fixit.js': ['fixit.js', 'text/javascript; charset=utf-8'],
-  '/fixit.css': ['fixit.css', 'text/css; charset=utf-8']
+  '/fixit.css': ['fixit.css', 'text/css; charset=utf-8'],
+  '/doctor.js': ['doctor.js', 'text/javascript; charset=utf-8'],
+  '/doctor.css': ['doctor.css', 'text/css; charset=utf-8']
 };
 function json(res, code, obj) {
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
@@ -41,6 +46,35 @@ export async function handle(req, res) {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'");
   if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed.' });
+  if (url.pathname === '/api/readme-doctor') {
+    const username=(url.searchParams.get('username')||'').trim();
+    const repository=url.searchParams.get('repo')||'';
+    if(!validUsername(username)||!/^[a-zA-Z0-9_.-]{1,100}$/.test(repository))
+      return json(res,400,{error:'Choose a valid username and repository.'});
+    const ip=req.socket.remoteAddress||'unknown',now=Date.now();
+    if(doctorRequests.size>1500)for(const [k,v] of doctorRequests)if(v.until<=now)doctorRequests.delete(k);
+    const previous=doctorRequests.get(ip);
+    if(!previous||previous.until<=now)doctorRequests.set(ip,{count:1,until:now+3600000});
+    else if(++previous.count>18)return json(res,429,{error:'README Doctor request limit reached. Retry later.'});
+    const key=username.toLowerCase()+'/'+repository.toLowerCase();
+    const cached=doctorCache.get(key);
+    if(cached&&cached.expires>now) {
+      try{return json(res,200,await cached.promise);}catch{doctorCache.delete(key);}
+    }
+    if(doctorCache.size>=200){
+      for(const [k,v] of doctorCache)if(v.expires<=now)doctorCache.delete(k);
+      if(doctorCache.size>=200)doctorCache.delete(doctorCache.keys().next().value);
+    }
+    const promise=inspectPublicReadme(username,repository);
+    doctorCache.set(key,{promise,expires:now+TTL});
+    try{return json(res,200,await promise);}
+    catch(error){
+      doctorCache.delete(key);
+      const status=error instanceof ApiError?error.status:500;
+      console.warn('README Doctor error:',error.message);
+      return json(res,status,{error:status===500?'Could not check this README. Please retry.':error.message});
+    }
+  }
   if (url.pathname === '/api/fixit') {
     const username = (url.searchParams.get('username') || '').trim();
     const repoName = url.searchParams.get('repo') || '';
