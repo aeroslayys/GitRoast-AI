@@ -1,0 +1,28 @@
+name: Install GitRoast AI source
+on:
+  push:
+    paths:
+      - 'gitroast-source.b64'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Extract project archive
+        run: |
+          node -e "const fs=require('node:fs');const zlib=require('node:zlib');fs.writeFileSync('/tmp/gitroast-source.tar',zlib.brotliDecompressSync(Buffer.from(fs.readFileSync('gitroast-source.b64','utf8').trim(),'base64')))"
+          tar -xf /tmp/gitroast-source.tar -C .
+          rm gitroast-source.b64
+      - name: Commit project sources
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --staged --quiet || git commit -m 'feat: install GitRoast AI application'
+          git push
