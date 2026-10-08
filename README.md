@@ -32,6 +32,35 @@ It combines a **transparent, rules-based score** with **optional Google Gemini f
 
 The interface uses a **muted Windows Vista Aero / Frutiger Aero aesthetic**, with frosted-glass panels, soft blue-grey colors, and responsive layouts.
 
+## Challenge Vertical, Approach & Assumptions
+
+### Chosen challenge vertical
+
+**GitHub Portfolio Reviewer — student and developer portfolio improvement.** The challenge asks for an assistant that takes a real GitHub username, inspects public profile information, gives an honest but constructive first impression, and helps the owner improve what others see. GitRoast AI is designed for students and early-career developers whose work may be difficult to assess because of incomplete bios, unclear repositories, or missing documentation.
+
+### Approach and decision-making logic
+
+1. **Collect public evidence:** Validate the username and retrieve publicly available profile information and original, non-archived repositories through the GitHub REST API. Sample README information from selected projects rather than assuming every repository was inspected.
+2. **Evaluate portfolio presentation:** Apply the **deterministic 100-point heuristic** implemented in `engine.js`: Profile basics (20), Project clarity (25), Documentation (30), Recent work (15), and Discoverability (10). Missing evidence results in lower scores within the relevant category.
+3. **Choose practical next steps:** Use observed signals—such as a missing bio, short descriptions, absent sampled READMEs, missing demo links, or limited topics—to rank concrete improvement tasks by priority.
+4. **Produce explainable feedback:** Optionally ask Google Gemini to turn those findings into recruiter-style observations, a playful but respectful roast, encouragement, and a suggested next step. **Gemini does not calculate or change the score.** If Gemini is unavailable, explicitly labeled rules-based feedback takes its place.
+5. **Support action and follow-up:** README Doctor checks seven documentation signals for a selected public repository; Fix-It Studio creates editable drafts based on available evidence and placeholders for unknown details. A browser-local baseline and fresh, Gemini-free rechecks let users compare changes over time.
+
+### How the solution works
+
+**GitHub username → public GitHub data → transparent score and prioritized feedback → editable improvements → before/after comparison.**
+
+The interface groups this journey under **Review → Improve → Track**. All generation and inspection is initiated by the user; the application does not make GitHub changes on their behalf.
+
+### Assumptions and limitations
+
+- **Audience and visibility:** The profile belongs to a public personal GitHub account. Private repositories, private contributions, and work hosted elsewhere cannot be reliably evaluated from public GitHub metadata.
+- **Scope of evidence:** GitHub descriptions, topics, activity timestamps, homepage links, and a limited README sample are useful presentation signals, **not proof that software works or that the author has a particular skill level**. README Doctor checks documentation text, not running code.
+- **Fair interpretation:** The score represents how clearly a portfolio is presented in a quick public-profile scan. It is **not a prediction of hiring outcomes**, and playful feedback should not be treated as a judgment of a person.
+- **Optional AI:** Gemini requires a server-side API key and available model access. Rules-based alternatives keep the core review useful when Gemini cannot respond. Generated drafts require human verification before publishing.
+- **User control and persistence:** No GitHub login or write permission is required. Improvements are copied or downloaded by the user; progress snapshots are stored in their current browser, not synchronized across devices.
+- **External availability:** GitHub API limits, network failures, caching, and incomplete public metadata can affect what can be inspected and how current the results are.
+
 ## ✨ The experience: Review → Improve → Track
 
 Instead of a long stack of separate dashboards, the report has **three tabs**:
