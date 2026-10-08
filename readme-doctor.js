@@ -34,7 +34,7 @@ export function reviewReadme(markdown, options={}) {
   const features=get(/^(features?|highlights?|capabilities)\b/i);
   const setup=get(/^(install|installation|setup|getting started|quick ?start|prerequisites?|requirements?)\b/i);
   const usage=get(/^(usage|how to use|examples?|running|tutorial|instructions?)\b/i);
-  const statusSection=get(/^(status|roadmap|todo|known issues?|limitations?|development|next steps?)\b/i);
+  const statusSection=get(/^(project status|current status|development status|status|roadmap|todo|known issues?|limitations?|development|next steps?)\b/i);
   const license=get(/^(license|licensing|copyright)\b/i);
   const codeExample=/\x60{3}[\s\S]{6,}?\x60{3}/.test(source)||/^\s{4,}\S/m.test(source);
   const visuals=/!\[[^\]]*\]\([^)]+\)|<img\b[^>]*src=|<video\b/i.test(source);
