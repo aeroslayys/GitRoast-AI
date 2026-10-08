@@ -28,7 +28,7 @@ const pages = {
 };
 
 export async function serveAsset(pathname, res) {
-  const file = pages[url.pathname];
+  const file = pages[pathname];
   if (!file) return json(res, 404, { error: 'Page not found.' });
   try {
     const bytes = await readFile(join(root, 'public', file[0]));

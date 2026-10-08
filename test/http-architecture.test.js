@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createApp, requestIdentity } from '../server.js';
+process.env.NODE_ENV = 'test';
+const { createApp, requestIdentity } = await import('../server.js');
 import { requestIdentity as trustedIdentity } from '../http/request-identity.js';
 import { handleProfileRoute } from '../http/profile-routes.js';
 import { handleImprovementRoute } from '../http/improvement-routes.js';
