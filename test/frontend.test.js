@@ -6,6 +6,8 @@ const js = readFileSync(new URL('../public/app.js', import.meta.url), 'utf8');
 const style = readFileSync(new URL('../public/style.css', import.meta.url), 'utf8');
 const aero = readFileSync(new URL('../public/aero.css', import.meta.url), 'utf8');
 const vista = readFileSync(new URL('../public/vista.css', import.meta.url), 'utf8');
+const fixCSS = readFileSync(new URL('../public/fixit.css', import.meta.url), 'utf8');
+const fixJS = readFileSync(new URL('../public/fixit.js', import.meta.url), 'utf8');
 test('feedback provenance visible in report', () => {
   for (const id of ['source-banner','source-title','source-description','source-tag','feedback-method','ai-badge']) {
     assert.match(html, new RegExp('id="'+id+'"'));
@@ -56,4 +58,21 @@ test('process cards show compact Vista icons and readable text', () => {
   assert.match(vista, /display:inline-grid/);
   assert.match(vista, /width:58px/);
   assert.match(vista, /\.feature-card p\s*\{[\s\S]*?font-size:16px/);
+});
+
+test('Fix-It Studio offers labeled, editable, copyable drafts', () => {
+  for (const id of ['fixit-studio', 'fixit-repo', 'fixit-generate', 'fixit-result', 'fixit-source',
+    'fixit-bio', 'fixit-description', 'fixit-readme', 'fixit-download']) {
+    assert.match(html, new RegExp('id="'+id+'"'));
+  }
+  assert.match(html, /href="\/fixit\.css"/);
+  assert.match(html, /src="\/fixit\.js"/);
+  assert.match(fixJS, /gitroast:report/);
+  assert.match(fixJS, /gitroast:reset/);
+  assert.match(fixJS, /data-copy/);
+  assert.match(fixJS, /source === 'gemini'/);
+  assert.match(fixJS, /navigator\.clipboard\.writeText/);
+  assert.doesNotMatch(fixJS, /\.innerHTML\s*=/);
+  assert.match(fixCSS, /Vista Aero/);
+  assert.match(fixCSS, /@media\(max-width:640px\)/);
 });
