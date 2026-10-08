@@ -155,7 +155,7 @@ export function fallbackFeedback(data, analysis) {
     f.described < f.originalRepos ? 'Your repositories are giving mysterious stranger energy. Write a synopsis.' :
     'The code is here. The next mission is making people care in 30 seconds.';
   return {
-    source: 'rules', headline: analysis.score >= 70 ? 'The foundation is strong.' : 'Potential detected. Polish required.',
+    source: 'rules', model: null, headline: analysis.score >= 70 ? 'The foundation is strong.' : 'Potential detected. Polish required.',
     verdict: 'In a 30-second scan: ' + f.originalRepos + ' original public repos, ' + f.readmes + ' READMEs out of ' + f.inspected + ' checked. ' + (fix ? 'First fix: ' + fix.title.toLowerCase() + '.' : ''),
     roast, kind: 'You have something real to build on. A few focused improvements can make your work easier to understand.',
     nextStep: fix?.how || 'Choose one flagship project and explain its impact.'
@@ -236,7 +236,7 @@ export async function aiFeedback(data, analysis) {
       const obj = await requestGeminiModel(model, key, prompt, model === primary ? 2 : 1);
       const safe = (value, max, previous) => str(value, max).trim() || previous;
       console.info('Gemini feedback succeeded using model ' + model);
-      return { source: 'gemini', headline: safe(obj.headline, 65, fallback.headline),
+      return { source: 'gemini', model, headline: safe(obj.headline, 65, fallback.headline),
         verdict: safe(obj.verdict, 250, fallback.verdict), roast: safe(obj.roast, 170, fallback.roast),
         kind: safe(obj.kind, 170, fallback.kind), nextStep: safe(obj.nextStep, 170, fallback.nextStep) };
     } catch (error) {
