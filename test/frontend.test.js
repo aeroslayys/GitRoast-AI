@@ -125,3 +125,14 @@ test('report consolidates into three workflow stages', () => {
   assert.match(html,/src="\/workspace\.js"/);
   assert.match(html,/href="\/workspace\.css"/);
 });
+
+test('report view replaces the large hero with a compact functional search', () => {
+  const compact = readFileSync(new URL('../public/workspace.css', import.meta.url), 'utf8');
+  assert.match(html, /class="audit-search-prompt"/);
+  assert.match(html, /id="analyze-form"/);
+  assert.match(compact, /body\.has-report \.hero\{/);
+  assert.match(compact, /body\.has-report \.hero::before/);
+  assert.match(compact, /body\.has-report \.hero \.primary-btn/);
+  assert.match(compact, /body\.has-report \.search-form/);
+  assert.match(compact, /@media\(max-width:640px\)/);
+});
