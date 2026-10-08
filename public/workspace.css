@@ -136,3 +136,15 @@ body.has-report .nav-links a[href="#how-it-works"],body.has-report .nav-links a[
 @media(prefers-reduced-motion:reduce){
   .skip-link{transition:none;}
 }
+
+
+/* Keep scenic, oversized Aero glow decoration from extending the mobile
+   document's scrollable width (verified by Chromium at 390px). */
+html, body { overflow-x: clip; }
+@supports not (overflow-x: clip) {
+  html, body { overflow-x: hidden; }
+}
+@media (max-width: 640px) {
+  .ambient-one { right: 0; width: min(70vw, 300px); height: min(70vw, 300px); }
+  .ambient-two { left: 0; width: min(60vw, 260px); height: min(60vw, 260px); }
+}
