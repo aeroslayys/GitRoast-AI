@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/aero.css">
   <link rel="stylesheet" href="/vista.css">
+  <link rel="stylesheet" href="/fixit.css">
   <script src="/app.js" defer></script>
+  <script src="/fixit.js" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -120,6 +122,58 @@
           <article class="panel action-panel"><div class="panel-label">05 / YOUR GLOW-UP PLAN</div><h3>Less scrolling. <span>More shipping.</span></h3><p class="panel-description">Real fixes, ordered by impact. Check them off as you go.</p><div class="progress-meta"><span>CHECKLIST PROGRESS</span><strong id="action-progress-label">0 / 0 fixed</strong></div><div id="action-progress" class="action-progress-track" role="progressbar" aria-label="Action plan completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="action-progress-fill"></span></div><div id="action-list" class="action-list"></div></article>
           <article class="panel repos-panel"><div class="repo-heading"><div><div class="panel-label">06 / PROJECTS UNDER THE MICROSCOPE</div><h3>Featured repositories</h3></div><span id="repo-count" class="tiny-counter"></span></div><div id="repo-list" class="repo-list"></div></article>
         </div>
+        <section class="fixit-studio" id="fixit-studio" aria-labelledby="fixit-heading">
+          <div class="fixit-titlebar"><span class="fixit-title-icon" aria-hidden="true">✦</span><span>GitRoast / Fix-It Studio</span><span class="fixit-title-suffix">PORTFOLIO WORKSHOP</span></div>
+          <div class="fixit-content">
+            <div class="fixit-heading-row">
+              <div>
+                <div class="fixit-eyebrow">07 / TURN YOUR FEEDBACK INTO ACTION</div>
+                <h3 id="fixit-heading">Your portfolio, <span>rewritten.</span></h3>
+                <p>Draft a clearer bio, repository description, and README outline using real public GitHub information.</p>
+              </div>
+              <span class="fixit-sticker">✧ COPY • EDIT • IMPROVE</span>
+            </div>
+            <div class="fixit-controls">
+              <div class="fixit-picker">
+                <label for="fixit-repo">Choose a featured repository</label>
+                <select id="fixit-repo" aria-describedby="fixit-picker-hint"><option value="">Run an audit first</option></select>
+                <span id="fixit-picker-hint">We'll use only the public profile and selected repository metadata.</span>
+              </div>
+              <button type="button" id="fixit-generate" class="fixit-generate" disabled>✦ Generate my fixes</button>
+            </div>
+            <div class="fixit-message" id="fixit-message" role="status" aria-live="polite">Run a profile audit to unlock Fix-It Studio.</div>
+            <div id="fixit-result" class="fixit-result" hidden>
+              <div class="fixit-result-banner" id="fixit-result-banner" data-source="rules">
+                <strong id="fixit-source">DRAFT SOURCE: RULES-BASED</strong>
+                <span id="fixit-subtitle">Editable starting points. Verify every claim before publishing.</span>
+              </div>
+              <div class="fixit-editors">
+                <article class="fixit-editor">
+                  <div class="fixit-editor-head"><div><span class="fixit-editor-step">01</span><h4>GitHub bio</h4></div><button type="button" class="fixit-copy" data-copy="bio">⎘ Copy bio</button></div>
+                  <p>Tell visitors who you are and what you work on.</p>
+                  <label class="visually-hidden" for="fixit-bio">Editable suggested GitHub bio</label>
+                  <textarea id="fixit-bio" rows="3" maxlength="160" spellcheck="true"></textarea>
+                  <div class="fixit-foot"><span>Profile → Edit profile</span><span id="fixit-bio-count">0 / 160</span></div>
+                </article>
+                <article class="fixit-editor" id="fixit-description-card">
+                  <div class="fixit-editor-head"><div><span class="fixit-editor-step">02</span><h4>Repo description</h4></div><button type="button" class="fixit-copy" data-copy="description">⎘ Copy description</button></div>
+                  <p>Summarize the problem and what the project actually does.</p>
+                  <label class="visually-hidden" for="fixit-description">Editable suggested repository description</label>
+                  <textarea id="fixit-description" rows="3" maxlength="350" spellcheck="true"></textarea>
+                  <div class="fixit-foot"><span>Repository → About → Edit</span><span id="fixit-description-count">0 / 350</span></div>
+                </article>
+                <article class="fixit-editor fixit-readme" id="fixit-readme-card">
+                  <div class="fixit-editor-head"><div><span class="fixit-editor-step">03</span><h4>README outline</h4></div><div class="fixit-editor-actions"><button type="button" class="fixit-copy" data-copy="readme">⎘ Copy Markdown</button><button type="button" id="fixit-download">↓ .md</button></div></div>
+                  <p>A starting outline, not a replacement for documenting what you really built.</p>
+                  <label class="visually-hidden" for="fixit-readme">Editable Markdown README outline</label>
+                  <textarea id="fixit-readme" rows="12" maxlength="3800" spellcheck="true"></textarea>
+                  <div class="fixit-foot"><span>Replace bracketed placeholders with verified details</span><span id="fixit-readme-count">0 / 3800</span></div>
+                </article>
+              </div>
+              <p class="fixit-caution">Suggestions are drafts, not verified facts. Review them before adding them to your profile or repository. GitRoast never edits GitHub on your behalf.</p>
+            </div>
+          </div>
+        </section>
         <p id="report-disclaimer" class="report-disclaimer"></p>
       </section>
 
