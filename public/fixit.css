@@ -207,3 +207,20 @@
   .fixit-studio *, .fixit-studio *::before, .fixit-studio *::after {scroll-behavior:auto!important;}
 }
 @media print { .fixit-controls,.fixit-copy,.fixit-editor-actions button {display:none!important;} }
+
+
+/* Easy-to-find Vista Aero shortcut in the audit toolbar. */
+.fixit-quicklink {
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:10px 14px;
+  font:750 14px "Segoe UI",Tahoma,sans-serif;
+  color:#fff;text-shadow:0 1px #244e68;
+  border:1px solid #4d7493;border-radius:8px;
+  background:linear-gradient(#d6eaf5 0%,#93b6cf 47%,#547f9f 51%,#3e6e92 100%);
+  box-shadow:inset 0 1px #ffffffb7,0 3px 10px #50758b4a;
+  text-decoration:none;
+}
+.fixit-quicklink:hover {filter:brightness(1.07);}
+@media(max-width:640px) {
+  .fixit-quicklink {font-size:13px;white-space:normal;text-align:center;padding:9px;}
+}

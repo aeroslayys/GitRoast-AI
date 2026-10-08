@@ -76,3 +76,8 @@ test('Fix-It Studio offers labeled, editable, copyable drafts', () => {
   assert.match(fixCSS, /Vista Aero/);
   assert.match(fixCSS, /@media\(max-width:640px\)/);
 });
+
+test('Fix-It Studio is discoverable from report actions', () => {
+  assert.match(html, /href="#fixit-studio"/);
+  assert.match(html, /class="fixit-quicklink"/);
+});
