@@ -48,3 +48,12 @@ test('Vista Aero styling has readable typography and clear glass UI', () => {
   assert.match(vista, /@media\s*\(max-width:\s*640px\)/);
   assert.match(vista, /prefers-reduced-motion/);
 });
+
+test('process cards show compact Vista icons and readable text', () => {
+  const icons = html.match(/class="feature-icon" aria-hidden="true"/g) || [];
+  assert.equal(icons.length, 3);
+  assert.match(vista, /Vista process card refinement/);
+  assert.match(vista, /display:inline-grid/);
+  assert.match(vista, /width:58px/);
+  assert.match(vista, /\.feature-card p\s*\{[\s\S]*?font-size:16px/);
+});
