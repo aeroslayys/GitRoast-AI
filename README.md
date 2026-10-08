@@ -94,6 +94,12 @@ You can also **share a profile-specific report link**, copy a text summary, or d
 
 ### Improve — one plan, one workshop
 
+**New: Repository Evidence Intelligence (on-demand, read-only).** Select a public repository in the Portfolio Workshop and explicitly choose *Inspect selected repository paths*. GitRoast verifies that the repository belongs to the requested owner and is public, then fetches the public GitHub tree (up to 2,000 file paths). It reports whether filenames suggest README, tests, CI, deployment configuration, or additional documentation. A target-role selector compares these same path signals to fixed frontend, backend, full-stack, AI/ML, and DevOps criteria. The results include evidence coverage and confidence; an absent signal in a partial listing is marked **unknown**, not missing. **No repository file contents are read or executed, and neither these results nor role assessments affect the health score.**
+
+**New: Scoring transparency and AI safeguards.** Every 100-point score category can be expanded to reveal exact earned/max signal points and the associated public evidence counts. An anti-bias disclosure explains why stars, followers, account age, and programming-language count do not award points. A separate Gemini-response validator rejects malformed strings, invented claims about running code, and unsupported hiring promises; the app falls back to labeled rules-based feedback.
+
+
+
 The **Glow-Up Plan** prioritizes specific improvements instead of giving generic advice. Each recommendation now includes **GitHub evidence links**, its relevant scoring category, and a conservative, clearly labeled **potential point estimate**. Check off tasks as you work; the first few are shown up front to reduce clutter.
 
 A **score improvement preview** lets you select planned fixes without modifying your actual audit score. The preview is capped by unearned points in each deterministic scoring category, and fixing issues on GitHub followed by **Track → Recheck GitHub now** is the only way to measure a real change. A **personalized seven-day Rescue Roadmap** schedules the top evidence-backed tasks, then includes link verification and a fresh score check.

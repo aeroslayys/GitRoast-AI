@@ -20,3 +20,19 @@
 .evidence-criteria small{display:block;overflow-wrap:anywhere;color:#607e8d;margin-top:4px;}
 #evidence-status{min-height:21px;}
 @media(max-width:680px){.repo-evidence{padding:14px}.evidence-findings,.evidence-criteria{grid-template-columns:1fr;}}
+
+
+/* Transparent deterministic score inspection and limitations. */
+.score-detail,.score-policy{border:1px solid #b8d1dc;background:#f5fbfd;color:#31576b;
+ border-radius:9px;padding:9px 12px;margin-top:9px;}
+.score-detail summary,.score-policy summary{cursor:pointer;color:#285d78;font-size:13px;font-weight:750;}
+.score-detail summary:focus-visible,.score-policy summary:focus-visible{outline:3px solid #367a9e;}
+.score-signal{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:9px 0;
+ border-bottom:1px solid #c7dce3;font-size:13px;}
+.score-signal span{font-weight:750;color:#285d78;}
+.score-signal small{grid-column:1/-1;color:#55788d;line-height:1.45;}
+.score-limit{font-size:12px!important;color:#5a7c8b;}
+.score-policy{margin:14px 0;}
+.score-policy summary{font-size:15px;}
+.score-policy summary small{font-size:12px;margin-left:8px;font-weight:450;}
+.score-policy ul{font-size:13px;line-height:1.6;margin:12px 0 2px;padding-left:22px;}
