@@ -107,6 +107,8 @@ function renderScore(data) {
   setText('score-badge', score >= 80 ? 'LOOKING SHARP' : score >= 60 ? 'ON THE RIGHT TRACK' : score >= 40 ? 'KEEP IMPROVING' : 'START HERE');
   byId('score-gauge').style.setProperty('--progress', score + '%');
   const area = byId('breakdown-list'); empty(area);
+  const policy = byId('score-policy-list'); empty(policy);
+  for (const rule of data.analysis.scorePolicy || []) policy.append(node('li', '', rule));
   for (const category of categories) {
     const item = node('div', 'breakdown-item');
     const meta = node('div', 'breakdown-meta');
@@ -116,6 +118,19 @@ function renderScore(data) {
     bar.style.width = Math.max(0, Math.min(100, category.score / category.max * 100)) + '%';
     track.append(bar);
     item.append(meta, track, node('div', 'breakdown-note', category.note));
+    const evidence = data.analysis.scoreDetails?.find(detail => detail.name === category.name);
+    if (evidence) {
+      const panel = node('details', 'score-detail');
+      panel.append(node('summary', '', 'See exact points and evidence'));
+      for (const signal of evidence.signals) {
+        const line = node('div', 'score-signal');
+        line.append(node('strong', '', signal.title), node('span', '', signal.earned + '/' + signal.max),
+          node('small', '', signal.evidence));
+        panel.append(line);
+      }
+      panel.append(node('p', 'score-limit', evidence.limitation));
+      item.append(panel);
+    }
     area.append(item);
   }
 }
