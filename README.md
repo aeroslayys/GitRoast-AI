@@ -24,7 +24,7 @@
 - Frontend: semantic HTML, custom responsive CSS, vanilla JavaScript (no build tools, no CDN JavaScript)
 - Backend: Node.js 20+ built-in HTTP server, no npm dependencies
 - GitHub REST API: profiles, repos, README metadata
-- AI: Google Gemini GenerateContent API, default `gemini-3.8-flash`
+- AI: Google Gemini GenerateContent API, default `gemini-3.5-flash-lite`
 - Hosting: Google Cloud Run source deployment
 
 ## Run locally
@@ -47,7 +47,7 @@ export GEMINI_API_KEY="YOUR_API_KEY"
 npm start
 ```
 
-A `.env.example` is provided as a reference. Node does not automatically load `.env` files. To load a locally created `.env` with Node 20+ use `node --env-file=.env server.js` (or export variables from your shell). Set `GITHUB_TOKEN` optionally for a higher GitHub REST API rate limit, especially during a hackathon demo. **Never put API keys in the browser, README, or GitHub commits.**
+A `.env.example` is provided as a reference. Node does not automatically load `.env` files. To load a locally created `.env` with Node 20+ use `node --env-file=.env server.js` (or export variables from your shell). Set `GITHUB_TOKEN` optionally for a higher GitHub REST API rate limit, especially during a hackathon demo. **Never put API keys in the browser, README, or GitHub commits.** The server retries transient Gemini failures and can fall back to `gemini-3.1-flash-lite` before using clearly labeled data-based feedback.
 
 ## Deploy on Google Cloud Run
 
@@ -65,7 +65,7 @@ gcloud run deploy gitroast-ai \
   --region asia-south1 \
   --allow-unauthenticated \
   --set-secrets GEMINI_API_KEY=gitroast-gemini:latest \
-  --set-env-vars GEMINI_MODEL=gemini-3.8-flash
+  --set-env-vars GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
 Cloud Run's source deployment uses Google Cloud buildpacks automatically; **no Dockerfile or build step is needed**. The server binds to `0.0.0.0` and the injected `PORT` variable. The resulting `https://...run.app` URL is your Cloud Run submission link.
@@ -80,7 +80,7 @@ If you want to demo first without Gemini, omit `--set-secrets` and `--set-env-va
 npm test
 ```
 
-The tests cover GitHub username validation, score bounds and breakdown consistency, actionable suggestions for empty profiles, unknown README handling, and mocked public GitHub API access. The static page and API route can also be smoke-tested with `curl http://localhost:8080/health`.
+The tests cover GitHub username validation, score bounds and breakdown consistency, actionable suggestions for empty profiles, unknown README handling, mocked public GitHub API access, and Gemini 503 retry/fallback behavior. The static page and API route can also be smoke-tested with `curl http://localhost:8080/health`.
 
 ## Repository size
 
