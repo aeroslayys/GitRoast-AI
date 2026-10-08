@@ -83,3 +83,54 @@ test('complete report endpoint returns real audit structure from mocked GitHub r
     if (oldKey === undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = oldKey;
   }
 });
+
+
+test('README Doctor HTTP route returns public evidence without exposing private repositories', async () => {
+  const original = globalThis.fetch;
+  const calls=[];
+  globalThis.fetch=async (address,options)=>{
+    const url=String(address);
+    if(!url.startsWith('https://api.github.com'))return original(address,options);
+    calls.push(url);
+    if(url.endsWith('/repos/public-student/sample'))return {ok:true,json:async()=>({
+      private:false,owner:{login:'public-student'},name:'sample',
+      html_url:'https://github.com/public-student/sample',homepage:''
+    })};
+    if(url.endsWith('/repos/public-student/sample/readme'))return {ok:true,json:async()=>({
+      encoding:'base64',content:Buffer.from('# Sample\n## Setup\nInstall as documented').toString('base64')
+    })};
+    if(url.endsWith('/repos/public-student/private-repo'))return {ok:true,json:async()=>({
+      private:true,owner:{login:'public-student'},name:'private-repo'
+    })};
+    throw Error('Unexpected endpoint '+url);
+  };
+  const app=createApp();
+  await new Promise(resolve=>app.listen(0,'127.0.0.1',resolve));
+  const base='http://127.0.0.1:'+app.address().port;
+  try{
+    const ui=await original(base+'/doctor.js');
+    assert.equal(ui.status,200);
+    assert.match(ui.headers.get('content-type'),/javascript/);
+    assert.match(await ui.text(),/README Doctor/);
+    const css=await original(base+'/doctor.css');
+    assert.equal(css.status,200);
+    assert.match(css.headers.get('content-type'),/css/);
+    const invalid=await original(base+'/api/readme-doctor?username=bad/name&repo=sample');
+    assert.equal(invalid.status,400);
+    const reviewed=await original(base+'/api/readme-doctor?username=public-student&repo=sample');
+    assert.equal(reviewed.status,200);
+    const body=await reviewed.json();
+    assert.equal(body.status,'found');
+    assert.equal(body.checks.length,7);
+    assert.equal(body.repository,'sample');
+    const cached=await original(base+'/api/readme-doctor?username=public-student&repo=sample');
+    assert.equal(cached.status,200);
+    assert.equal(calls.filter(u=>u.endsWith('/repos/public-student/sample/readme')).length,1);
+    const rejected=await original(base+'/api/readme-doctor?username=public-student&repo=private-repo');
+    assert.equal(rejected.status,404);
+    assert.equal(calls.filter(u=>u.includes('private-repo/readme')).length,0);
+  }finally{
+    await new Promise(resolve=>app.close(resolve));
+    globalThis.fetch=original;
+  }
+});
