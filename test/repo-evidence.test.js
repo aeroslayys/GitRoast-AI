@@ -4,7 +4,8 @@ import { analyzeRepositoryPaths, inspectRepositoryEvidence } from '../repo-evide
 import { scoreProfile } from '../engine.js';
 import { explainScore, SCORE_POLICY } from '../score-explain.js';
 import { validateFeedback } from '../ai-guardrails.js';
-import { createApp } from '../server.js';
+process.env.NODE_ENV = 'test';
+const { createApp } = await import('../server.js');
 
 const fixture={
   user:{login:'demo',name:'Demo',bio:'',blog:''},
