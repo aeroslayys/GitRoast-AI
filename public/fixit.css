@@ -1,0 +1,209 @@
+/*
+ * GitRoast Fix-It Studio — Vista Aero windowed editing suite.
+ * This additional stylesheet is deliberately scoped to .fixit-*.
+ */
+.fixit-studio {
+  margin:30px 0 32px;
+  border:1px solid #7393ad;
+  border-radius:16px;
+  background:linear-gradient(#e5eff5f2,#eef5f6f1 55%,#dfeaeced);
+  color:#284e63;
+  box-shadow:0 0 0 2px #ffffffb0,inset 0 1px #fff,0 17px 48px #385b7342;
+  -webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(16px);
+  overflow:hidden;
+  scroll-margin-top:22px;
+}
+.fixit-titlebar {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:50px;
+  padding:8px 17px;
+  font:750 14px "Segoe UI",Tahoma,sans-serif;
+  color:#1d4562;
+  text-shadow:0 1px #e4f3ff;
+  border-bottom:1px solid #85abc2;
+  background:linear-gradient(#f5fcffbd,#c4dae9dd 46%,#7ea6c2dc 50%,#b3cbdcdb);
+}
+.fixit-title-icon {
+  display:grid;place-items:center;
+  width:28px;height:28px;
+  border:1px solid #f0faff;
+  border-radius:7px;
+  color:#285b76;
+  background:linear-gradient(#d4faf3,#6fbbb7);
+  box-shadow:inset 0 1px #fff,0 2px 5px #496d8159;
+  font-size:18px;
+}
+.fixit-title-suffix {margin-left:auto;color:#3e6a80;font-size:11px;letter-spacing:1px;}
+.fixit-content {padding:30px;}
+.fixit-heading-row {display:flex;justify-content:space-between;align-items:center;gap:22px;}
+.fixit-eyebrow {font-size:12px;font-weight:750;letter-spacing:1px;color:#4a7b91;}
+.fixit-heading-row h3 {font-size:clamp(28px,3vw,36px);letter-spacing:-.8px;line-height:1.22;color:#1f4b67;margin:10px 0;}
+.fixit-heading-row h3 span {color:#558b8c;}
+.fixit-heading-row p {font-size:16px;line-height:1.7;color:#496b7c;margin:0;max-width:770px;}
+.fixit-sticker {
+  flex:none;
+  border:1px solid #86afbd;
+  border-radius:8px;
+  padding:10px 14px;
+  background:linear-gradient(#fafffff0,#c9e2e9e6);
+  box-shadow:inset 0 1px #fff,0 4px 10px #7299a02c;
+  font-size:12px;
+  letter-spacing:.3px;
+  color:#396779;
+  font-weight:750;
+}
+.fixit-controls {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:end;
+  gap:17px;
+  padding:19px;
+  margin-top:25px;
+  border:1px solid #adccd6;
+  background:linear-gradient(#f7fafbe8,#e2eef2f2);
+  border-radius:12px;
+  box-shadow:inset 0 2px #fff;
+}
+.fixit-picker {flex:1;min-width:220px;display:grid;gap:8px;}
+.fixit-picker label {font-size:15px;font-weight:750;color:#2c556e;}
+.fixit-picker select {
+  display:block;width:100%;
+  min-height:47px;
+  padding:10px 13px;
+  border:1px solid #91b2c3;
+  border-radius:8px;
+  font:600 16px "Segoe UI",Tahoma,sans-serif;
+  color:#294f63;
+  background:linear-gradient(#fff,#e5eff2);
+  box-shadow:inset 0 1px 3px #a0b5c638;
+}
+.fixit-picker select:disabled {opacity:.76;}
+.fixit-picker>span {font-size:13px;line-height:1.5;color:#597785;}
+.fixit-generate {
+  flex:none;min-height:48px;
+  padding:12px 22px;
+  border:1px solid #477ca0;
+  border-radius:9px;
+  color:#fff;
+  font:750 15px "Segoe UI",Tahoma,sans-serif;
+  text-shadow:0 1px #35536e;
+  background:linear-gradient(#d4ecfa,#8db8d0 48%,#588ba9 51%,#3978a0);
+  box-shadow:inset 0 1px #fff,0 5px 11px #486a844c;
+  cursor:pointer;
+}
+.fixit-generate:hover:not(:disabled) {filter:brightness(1.055);}
+.fixit-generate:disabled {opacity:.64;cursor:not-allowed;}
+.fixit-message {
+  padding:14px 17px;
+  margin-top:15px;
+  background:#e3eef1b8;
+  border:1px solid #bfd3da;
+  border-radius:9px;
+  color:#4a6978;
+  font-size:14px;
+  line-height:1.6;
+}
+.fixit-message[data-state="success"] {background:#e5f1e9;color:#346953;border-color:#accdb6;}
+.fixit-message[data-state="error"] {background:#f7eeee;color:#8a4350;border-color:#d6a8b0;}
+.fixit-result {margin-top:20px;scroll-margin-top:22px;}
+.fixit-result-banner {
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  background:linear-gradient(#e2f1ef,#c6dcd7);
+  border:1px solid #9dbcb8;
+  border-radius:9px;
+  color:#325e68;
+  font-size:13px;
+}
+.fixit-result-banner strong {font-size:13px;color:#34645c;}
+.fixit-result-banner span {font-size:13px;color:#496f70;}
+.fixit-result-banner[data-source="rules"] {background:linear-gradient(#f3f1e6,#e1e2d5);border-color:#c7c2ab;}
+.fixit-result-banner[data-source="rules"] strong {color:#74623e;}
+.fixit-editors {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:17px;}
+.fixit-editor {
+  min-width:0;
+  padding:22px;
+  border:1px solid #bbd1db;
+  border-bottom-color:#8faabd;
+  border-radius:11px;
+  background:linear-gradient(#f7fafbe8,#e5eff2e8);
+  box-shadow:inset 0 1px #fff,0 6px 16px #54778b20;
+}
+.fixit-readme {grid-column:1/-1;}
+.fixit-editor-head {display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.fixit-editor-head>div:first-child {display:flex;align-items:center;gap:10px;}
+.fixit-editor-head h4 {font-size:19px;line-height:1.3;color:#234f68;margin:0;}
+.fixit-editor-step {
+  width:29px;height:29px;display:grid;place-items:center;
+  border:1px solid #93b2c4;
+  border-radius:8px;
+  background:linear-gradient(#e7f8ff,#a3c6db);
+  color:#3a6c87;
+  font-size:12px;
+  font-weight:800;
+}
+.fixit-editor-actions {display:flex;gap:8px;flex-wrap:wrap;}
+.fixit-copy,.fixit-editor-actions button {
+  min-height:38px;
+  padding:7px 12px;
+  font:700 13px "Segoe UI",Tahoma,sans-serif;
+  color:#2b607f;
+  background:linear-gradient(#fff,#d4e6ef);
+  border:1px solid #93b5c8;
+  border-radius:7px;
+  box-shadow:inset 0 1px #fff,0 2px 5px #52758b26;
+  cursor:pointer;
+}
+.fixit-copy:hover,.fixit-editor-actions button:hover {background:linear-gradient(#fff,#bddbec);}
+.fixit-editor p {font-size:14px;color:#4e6f7e;line-height:1.6;margin:13px 0;}
+.fixit-editor textarea {
+  display:block;
+  width:100%;
+  min-height:102px;
+  resize:vertical;
+  padding:14px 15px;
+  border:1px solid #94b5c5;
+  border-radius:8px;
+  background:#fffefdf2;
+  color:#254a5d;
+  font:500 15px/1.65 "Segoe UI",Tahoma,sans-serif;
+  box-shadow:inset 0 2px 4px #6c9da32a;
+  outline-offset:3px;
+}
+.fixit-readme textarea {
+  min-height:315px;
+  font-family:Consolas,"Lucida Console",monospace;
+  font-size:14px;
+  line-height:1.6;
+}
+.fixit-foot {display:flex;justify-content:space-between;gap:13px;flex-wrap:wrap;margin-top:9px;color:#66818e;font-size:12px;}
+.fixit-foot span:last-child {white-space:nowrap;font-weight:750;}
+.fixit-caution {margin:18px 3px 2px;color:#587383;font-size:13px;line-height:1.65;}
+@media(max-width:780px) {
+  .fixit-content {padding:22px;}
+  .fixit-sticker {display:none;}
+  .fixit-editors {grid-template-columns:1fr;}
+  .fixit-readme {grid-column:1;}
+}
+@media(max-width:640px) {
+  .fixit-titlebar {font-size:13px;padding:8px 12px;}
+  .fixit-title-suffix {display:none;}
+  .fixit-content {padding:17px;}
+  .fixit-heading-row h3 {font-size:29px;}
+  .fixit-heading-row p {font-size:15px;}
+  .fixit-controls {padding:15px;gap:14px;}
+  .fixit-picker {min-width:100%;}
+  .fixit-generate {width:100%;min-height:49px;}
+  .fixit-editor {padding:17px;}
+  .fixit-editor-head h4 {font-size:18px;}
+  .fixit-editor textarea {font-size:16px;}
+  .fixit-readme textarea {font-size:14px;}
+  .fixit-foot {font-size:11px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .fixit-studio *, .fixit-studio *::before, .fixit-studio *::after {scroll-behavior:auto!important;}
+}
+@media print { .fixit-controls,.fixit-copy,.fixit-editor-actions button {display:none!important;} }

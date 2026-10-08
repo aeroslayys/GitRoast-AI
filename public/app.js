@@ -219,6 +219,8 @@ function render(data) {
   setText('report-disclaimer', data.analysis.disclaimer + (data.capped ? ' Only the first 300 public repositories were scanned.' : '') +
     ' Audited on ' + new Date(data.analyzedAt).toLocaleDateString() + '.');
   report.hidden = false;
+  window.dispatchEvent(new CustomEvent('gitroast:report', { detail: { username: data.user.login,
+    projects: data.projects.map(p => ({ name: p.name, description: p.description, hasReadme: p.hasReadme })) } }));
   report.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 async function analyze(username) {
@@ -255,6 +257,7 @@ byId('tone-roast').addEventListener('click', () => { tone = 'roast'; updateTone(
 byId('tone-kind').addEventListener('click', () => { tone = 'kind'; updateTone(); });
 byId('new-search').addEventListener('click', () => {
   report.hidden = true; current = null; clearError(); input.focus();
+  window.dispatchEvent(new Event('gitroast:reset'));
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 byId('share-report').addEventListener('click', async () => {

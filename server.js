@@ -3,10 +3,13 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { collectProfile, scoreProfile, aiFeedback, validUsername, ApiError } from './engine.js';
+import { generateFixes } from './fixit.js';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const cache = new Map();
 const requests = new Map();
+const fixCache = new Map();
+const fixRequests = new Map();
 const TTL = 10 * 60 * 1000;
 const pages = {
   '/': ['index.html', 'text/html; charset=utf-8'],
@@ -16,7 +19,9 @@ const pages = {
   '/vista.css': ['vista.css', 'text/css; charset=utf-8'],
   '/aero-landscape.svg': ['aero-landscape.svg', 'image/svg+xml'],
   '/favicon.svg': ['favicon.svg', 'image/svg+xml'],
-  '/app.js': ['app.js', 'text/javascript; charset=utf-8']
+  '/app.js': ['app.js', 'text/javascript; charset=utf-8'],
+  '/fixit.js': ['fixit.js', 'text/javascript; charset=utf-8'],
+  '/fixit.css': ['fixit.css', 'text/css; charset=utf-8']
 };
 function json(res, code, obj) {
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
@@ -36,6 +41,37 @@ export async function handle(req, res) {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'");
   if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed.' });
+  if (url.pathname === '/api/fixit') {
+    const username = (url.searchParams.get('username') || '').trim();
+    const repoName = url.searchParams.get('repo') || '';
+    if (!validUsername(username)) return json(res, 400, { error: 'Enter a valid GitHub username.' });
+    if (repoName.length > 100 || (repoName && !/^[a-zA-Z0-9_.-]+$/.test(repoName))) {
+      return json(res, 400, { error: 'Choose a valid repository from the report.' });
+    }
+    // On-demand only; separate rate limit keeps Gemini costs under control.
+    const ip = req.socket.remoteAddress || 'unknown';
+    const now = Date.now();
+    const limit = fixRequests.get(ip);
+    if (!limit || limit.until < now) fixRequests.set(ip, { count: 1, until: now + 3600000 });
+    else if (++limit.count > 12) return json(res, 429, { error: 'Fix-It Studio limit reached. Please try again later.' });
+    if (fixRequests.size > 1000) for (const [k,v] of fixRequests) if (v.until < now) fixRequests.delete(k);
+    const key = username.toLowerCase() + '/' + repoName.toLowerCase();
+    const existing = fixCache.get(key);
+    if (existing && existing.expires > now) {
+      try { return json(res, 200, await existing.promise); }
+      catch { fixCache.delete(key); }
+    }
+    if (fixCache.size > 500) for (const [k,v] of fixCache) if (v.expires <= now) fixCache.delete(k);
+    const promise = generateFixes(username, repoName);
+    fixCache.set(key, { promise, expires: now + TTL });
+    try { return json(res, 200, await promise); }
+    catch (error) {
+      fixCache.delete(key);
+      const status = error instanceof ApiError ? error.status : 500;
+      console.error('Fix-It Studio request failed:', error.message);
+      return json(res, status, { error: status === 500 ? 'Unable to generate suggestions right now.' : error.message });
+    }
+  }
   if (url.pathname === '/health') return json(res, 200, { ok: true });
   if (url.pathname === '/api/analyze') {
     const username = (url.searchParams.get('username') || '').trim();

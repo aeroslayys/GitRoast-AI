@@ -166,10 +166,10 @@ const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/';
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const transient = status => status === 408 || status === 429 || status >= 500 && status <= 599;
 
-async function requestGeminiModel(model, apiKey, prompt, attempts) {
+export async function requestGeminiModel(model, apiKey, prompt, attempts, maxOutputTokens = 1100) {
   const body = JSON.stringify({
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
-    generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 1100 }
+    generationConfig: { responseMimeType: 'application/json', maxOutputTokens }
   });
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt++) {
@@ -191,9 +191,6 @@ async function requestGeminiModel(model, apiKey, prompt, attempts) {
       const payload = await response.json();
       const output = payload.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
       const parsed = JSON.parse(output);
-      if (typeof parsed?.verdict !== 'string' || typeof parsed?.roast !== 'string') {
-        throw new Error('Malformed AI output');
-      }
       return parsed;
     } catch (error) {
       lastError = error;
@@ -234,6 +231,7 @@ export async function aiFeedback(data, analysis) {
     if (index > 0 && !useBackup) break;
     try {
       const obj = await requestGeminiModel(model, key, prompt, model === primary ? 2 : 1);
+      if (typeof obj?.verdict !== 'string' || typeof obj?.roast !== 'string') throw new Error('Malformed AI output');
       const safe = (value, max, previous) => str(value, max).trim() || previous;
       console.info('Gemini feedback succeeded using model ' + model);
       return { source: 'gemini', model, headline: safe(obj.headline, 65, fallback.headline),

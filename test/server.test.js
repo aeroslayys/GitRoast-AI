@@ -14,6 +14,16 @@ test('serves health check, homepage, stylesheet and rejects malformed names', as
     const home = await fetch(url);
     assert.equal(home.status, 200);
     assert.match(await home.text(), /GitRoast AI/);
+    const fixCSS = await fetch(url + '/fixit.css');
+    assert.equal(fixCSS.status, 200);
+    assert.match(await fixCSS.text(), /Fix-It Studio/);
+    const fixJS = await fetch(url + '/fixit.js');
+    assert.equal(fixJS.status, 200);
+    assert.match(await fixJS.text(), /gitroast:report/);
+    const noName = await fetch(url + '/api/fixit');
+    assert.equal(noName.status, 400);
+    const badRepo = await fetch(url + '/api/fixit?username=student&repo=bad%2Frepo');
+    assert.equal(badRepo.status, 400);
     const vista = await fetch(url + '/vista.css');
     assert.equal(vista.status, 200);
     assert.match(vista.headers.get('content-type'), /text\/css/);
