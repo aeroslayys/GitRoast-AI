@@ -1,4 +1,5 @@
 // GitRoast's deterministic audit engine. Scores are intentionally not AI-generated.
+import { buildImprovementPlan } from './improvement-plan.js';
 const USERNAME = /^(?!.*--)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/;
 const API = 'https://api.github.com';
 const day = 86400000;
@@ -142,7 +143,8 @@ export function scoreProfile(data, now = new Date()) {
   if (!recent180 && count) add('low', 'Show a meaningful recent update', 'No original public repo has a push within 180 days.', 'Polish an existing project and publish an actual improvement.');
   if (!actions.length) add('low', 'Make a flagship project memorable', 'Your visible fundamentals already look good.', 'Publish a clear product screenshot, a live demo, and a short architecture note.');
   actions.sort((a,b) => ({high:0,medium:1,low:2}[a.priority] - {high:0,medium:1,low:2}[b.priority]));
-  return { score, categories, facts, actions: actions.slice(0, 5),
+  const plan = buildImprovementPlan({ user, repos, projects, categories, actions: actions.slice(0, 5), facts });
+  return { score, categories, facts, actions: plan.actions, plan: {week: plan.week, scan: plan.scan, estimateDisclaimer: plan.estimateDisclaimer},
     label: score >= 80 ? 'Strong first impression' : score >= 60 ? 'Good foundation' : score >= 40 ? 'Getting there' : 'Needs some love',
     disclaimer: 'This transparent heuristic is not a hiring prediction. Only public GitHub data is used; README sampling is not exhaustive.' };
 }

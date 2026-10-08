@@ -142,3 +142,23 @@ test('homepage omits the redundant decorative perspective bar', () => {
   assert.doesNotMatch(html, /class="section-rule"/);
   assert.match(html, /id="how-it-works"/);
 });
+
+
+test('evidence-backed recruiter scan and score preview are accessible and independently styled', () => {
+  const planJS = readFileSync(new URL('../public/plan.js', import.meta.url), 'utf8');
+  const planCSS = readFileSync(new URL('../public/plan.css', import.meta.url), 'utf8');
+  for (const id of ['recruiter-scan-list','rescue-planner','plan-score-preview',
+    'plan-score-meter','plan-week-list','plan-selection-list','plan-disclaimer']) {
+    assert.match(html, new RegExp('id="' + id + '"'));
+  }
+  assert.match(html, /src="\/plan\.js"/);
+  assert.match(html, /href="\/plan\.css"/);
+  assert.match(planJS, /gitroast:report/);
+  assert.match(planJS, /gitroast:reset/);
+  assert.match(planJS, /categoryGaps/);
+  assert.doesNotMatch(planJS, /\.innerHTML\s*=/);
+  assert.match(planCSS, /@media\(max-width:600px\)/);
+  assert.doesNotThrow(() => execFileSync(process.execPath, ['--check','public/plan.js'], {
+    cwd:new URL('..', import.meta.url),stdio:'pipe'
+  }));
+});

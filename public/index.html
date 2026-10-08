@@ -17,11 +17,13 @@
   <link rel="stylesheet" href="/doctor.css">
   <link rel="stylesheet" href="/progress.css">
   <link rel="stylesheet" href="/workspace.css">
+  <link rel="stylesheet" href="/plan.css">
   <script src="/app.js" defer></script>
   <script src="/fixit.js" defer></script>
   <script src="/doctor.js" defer></script>
   <script src="/progress.js" defer></script>
   <script src="/workspace.js" defer></script>
+  <script src="/plan.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -134,6 +136,10 @@
 
 
         </div>
+        <details class="recruiter-scan" id="recruiter-scan">
+          <summary>30-second recruiter evidence scan <small>Five factual checkpoints, not a hiring prediction</small></summary>
+          <ol id="recruiter-scan-list" class="scan-steps" aria-label="Five steps in a quick recruiter scan"></ol>
+        </details>
         </section>
         <section id="audit-improve" class="audit-view" role="tabpanel" aria-labelledby="audit-tab-improve" hidden>
           <div class="improve-heading"><div><span class="eyebrow">YOUR NEXT MOVES</span><h3>Know what to fix. <span class="gradient-text">Then fix it.</span></h3></div><p>One improvement plan, one workshop, no repeated reports.</p></div>
@@ -143,6 +149,28 @@
               <summary>⌕ Browse featured repositories <span>Expand ▾</span></summary>
                         <article class="panel repos-panel"><div class="repo-heading"><div><div class="panel-label">SAMPLED REPOSITORIES</div><h3>Featured repositories</h3></div><span id="repo-count" class="tiny-counter"></span></div><div id="repo-list" class="repo-list"></div></article>
             </details>
+          </div>
+          <div id="rescue-planner" class="plan-shelf">
+            <section class="panel" aria-labelledby="plan-score-title">
+              <div class="panel-label">SCORE IMPROVEMENT PREVIEW</div>
+              <h3 id="plan-score-title">Plan the next point.</h3>
+              <p class="plan-explainer">Select possible fixes to see an illustrative score projection. This is separate from the real audit and your completed checklist.</p>
+              <div class="plan-score-row">
+                <div><span>CURRENT SCORE</span><strong id="plan-score-current">—</strong></div>
+                <span class="plan-score-arrow" aria-hidden="true">→</span>
+                <div><span>IF SELECTED FIXES WORK</span><strong id="plan-score-preview">—</strong><small id="plan-score-delta"></small></div>
+              </div>
+              <meter id="plan-score-meter" min="0" max="100" value="0" aria-label="Illustrative projected portfolio score"></meter>
+              <p id="plan-score-note" role="status" aria-live="polite">Run an audit to build your projection.</p>
+              <div id="plan-selection-list" class="plan-selections"></div>
+              <p id="plan-disclaimer" class="plan-explainer">Planning estimates are never actual audit scores.</p>
+            </section>
+            <section class="panel" aria-labelledby="plan-week-title">
+              <div class="panel-label">PERSONALIZED RESCUE ROADMAP</div>
+              <h3 id="plan-week-title">Your next seven days.</h3>
+              <p class="plan-explainer">Prioritized fixes from public evidence, followed by verification and a fresh score check.</p>
+              <ol id="plan-week-list" class="week-list"></ol>
+            </section>
           </div>
           <div id="improve-workspace" class="improve-workspace">
             <div class="improve-workspace-head">

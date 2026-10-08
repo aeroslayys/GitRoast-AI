@@ -32,7 +32,9 @@ const pages = {
   '/progress.js': ['progress.js', 'text/javascript; charset=utf-8'],
   '/progress.css': ['progress.css', 'text/css; charset=utf-8'],
   '/workspace.js': ['workspace.js', 'text/javascript; charset=utf-8'],
-  '/workspace.css': ['workspace.css', 'text/css; charset=utf-8']
+  '/workspace.css': ['workspace.css', 'text/css; charset=utf-8'],
+  '/plan.css': ['plan.css', 'text/css; charset=utf-8'],
+  '/plan.js': ['plan.js', 'text/javascript; charset=utf-8']
 };
 function json(res, code, obj) {
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });

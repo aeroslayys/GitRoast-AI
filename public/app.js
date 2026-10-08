@@ -186,6 +186,11 @@ function renderActions(data) {
     label.htmlFor = check.id;
     heading.append(label, node('span', 'priority ' + action.priority, action.priority));
     content.append(heading, node('div', 'action-why', action.why), node('div', 'action-how', '↗ ' + action.how));
+    if (Array.isArray(action.evidence) && action.evidence.length) {
+      const evidence = node('div', 'action-evidence', 'Source: ');
+      for (const entry of action.evidence) evidence.append(safeGithubLink(entry.url, entry.label + ' ↗', 'plan-evidence-link'));
+      content.append(evidence);
+    }
     if (action.repo) content.append(node('span', 'action-repo', 'REPO: ' + action.repo));
     item.append(check, content); area.append(item);
   }
@@ -229,8 +234,9 @@ function reportText(data) {
     '', 'RECRUITER VERDICT', data.feedback.verdict,
     '', 'THE ROAST', data.feedback.roast,
     '', 'SCORE BREAKDOWN', ...a.categories.map(c => '- ' + c.name + ': ' + c.score + '/' + c.max),
-    '', 'YOUR ACTION PLAN', ...a.actions.map((action, i) => (i + 1) + '. [' + action.priority.toUpperCase() + '] ' + action.title + '\n   Why: ' + action.why + '\n   Fix: ' + action.how),
-    '', a.disclaimer,
+    '', 'YOUR ACTION PLAN', ...a.actions.map((action, i) => (i + 1) + '. [' + action.priority.toUpperCase() + '] ' + action.title + '\n   Why: ' + action.why + '\n   Fix: ' + action.how + '\n   Evidence: ' + (action.evidence || []).map(e => e.url).join(', ')),
+    '', 'SEVEN-DAY RESCUE ROADMAP', ...(a.plan?.week || []).map(day => 'Day ' + day.day + ': ' + day.title + ' — ' + day.detail),
+    '', 'Planning projections are hypothetical. Recheck GitHub to measure actual changes.', a.disclaimer,
     'Made with GitRoast AI'
   ].join('\n');
 }
@@ -248,7 +254,9 @@ function render(data) {
     analysis: {
       score: data.analysis.score,
       categories: data.analysis.categories.map(({name, score, max}) => ({name, score, max})),
-      facts: data.analysis.facts
+      facts: data.analysis.facts,
+      actions: data.analysis.actions,
+      plan: data.analysis.plan
     },
     projects: data.projects.map(p => ({ name: p.name, description: p.description,
       hasReadme: p.hasReadme, readmeLength: p.readmeLength })) } }));

@@ -75,6 +75,8 @@ Instead of a long stack of separate dashboards, the report has **three tabs**:
 
 Paste a GitHub username—**no GitHub login required**. The server reads public profile information and original, non-archived repositories via the GitHub REST API.
 
+The **Review** stage also includes an expandable **30-second recruiter evidence scan** (identity, project clarity, sampled documentation, public proof of work, and first suggested fix). These are factual public signals, not hiring predictions.
+
 The **deterministic** score totals 100 points:
 
 | Category | Maximum | What it measures |
@@ -92,7 +94,9 @@ You can also **share a profile-specific report link**, copy a text summary, or d
 
 ### Improve — one plan, one workshop
 
-The **Glow-Up Plan** prioritizes specific improvements instead of giving generic advice. Check off tasks as you work; the first few are shown up front to reduce clutter.
+The **Glow-Up Plan** prioritizes specific improvements instead of giving generic advice. Each recommendation now includes **GitHub evidence links**, its relevant scoring category, and a conservative, clearly labeled **potential point estimate**. Check off tasks as you work; the first few are shown up front to reduce clutter.
+
+A **score improvement preview** lets you select planned fixes without modifying your actual audit score. The preview is capped by unearned points in each deterministic scoring category, and fixing issues on GitHub followed by **Track → Recheck GitHub now** is the only way to measure a real change. A **personalized seven-day Rescue Roadmap** schedules the top evidence-backed tasks, then includes link verification and a fresh score check.
 
 The workshop offers two related tools for the **same selected repository**:
 

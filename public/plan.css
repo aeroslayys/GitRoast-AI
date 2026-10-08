@@ -1,0 +1,49 @@
+/* Vista Aero coaching tools: source-backed scan, projected improvements, seven-day plan. */
+.recruiter-scan{margin-top:15px;background:linear-gradient(#f4fafc,#e5f0f4);
+ border:1px solid #aec7d3;border-radius:12px;padding:14px 20px;box-shadow:inset 0 1px #fff;color:#31576a;}
+.recruiter-scan summary{cursor:pointer;font-weight:750;font-size:17px;line-height:1.5;}
+.recruiter-scan summary small{display:block;font-size:13px;color:#577a8b;font-weight:450;}
+.scan-steps{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+.scan-step{display:flex;gap:8px;align-items:flex-start;min-width:0;border:1px solid #c0d5dd;
+ background:#f7fbfc;padding:12px;border-radius:9px;}
+.scan-time{color:#286887;font:750 12px "Segoe UI",Tahoma,sans-serif;white-space:nowrap;}
+.scan-details{min-width:0;overflow-wrap:anywhere;font-size:13px;line-height:1.45;}
+.scan-details p{margin:5px 0 0;color:#547587;}
+.plan-shelf{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:17px 0 0;color:#31566c;}
+.plan-shelf>.panel{padding:21px;background:linear-gradient(#f5fbfc,#e3eff2);border:1px solid #adc8d2;}
+.plan-shelf h3{margin:0 0 7px;font-size:22px;}
+.plan-shelf p{line-height:1.5;}
+.plan-explainer{font-size:13px;color:#557889;margin:0 0 13px;}
+.plan-score-row{display:flex;gap:14px;align-items:center;justify-content:space-between;
+ background:#fcffff;border:1px solid #b7d0dc;border-radius:9px;padding:13px;margin:0 0 10px;}
+.plan-score-row span{display:block;font-size:12px;color:#56798c;}
+.plan-score-row strong{display:block;font-size:20px;color:#255575;}
+.plan-score-row .plan-score-arrow{font-size:23px;color:#628ba2;}
+.plan-score-row #plan-score-delta{font-size:12px;color:#39705e;}
+#plan-score-meter{width:100%;height:12px;accent-color:#558fac;}
+#plan-score-note,#plan-disclaimer{font-size:12px;color:#587b8a;line-height:1.5;}
+.plan-selections{display:grid;gap:8px;margin-top:13px;}
+.plan-selection{display:flex;align-items:center;gap:10px;cursor:pointer;
+ padding:10px;background:#fafdfd;border:1px solid #bfd3dc;border-radius:9px;}
+.plan-selection input{width:17px;height:17px;flex:none;accent-color:#477f9d;}
+.plan-selection-copy{display:grid;gap:2px;min-width:0;}
+.plan-selection-copy strong{font-size:13px;}
+.plan-selection-copy small{font-size:11px;color:#5b7c8c;}
+.week-list{list-style:none;display:grid;gap:7px;margin:0;padding:0;}
+.week-step{display:flex;align-items:flex-start;gap:10px;border:1px solid #bfd3dc;
+ padding:10px;border-radius:9px;background:#fcffff;}
+.week-day{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:8px;
+ border:1px solid #98bdcd;background:linear-gradient(#fff,#d2e7f0);color:#34617a;font-weight:800;}
+.week-copy{min-width:0;overflow-wrap:anywhere;}
+.week-copy>strong{font-size:14px;}
+.week-copy p{font-size:12px;color:#557988;margin:4px 0;}
+.plan-evidence{font-size:11px;color:#5b7e91;display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px;}
+.plan-evidence-link{font-size:11px;color:#246287;font-weight:700;text-decoration:underline;}
+.plan-evidence-link:focus-visible{outline:3px solid #2e7299;outline-offset:3px;}
+.action-evidence{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;font-size:11px;color:#557889;}
+@media(max-width:950px){.scan-steps{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .plan-shelf{grid-template-columns:1fr;}}
+@media(max-width:600px){.scan-steps{grid-template-columns:1fr;}
+ .plan-shelf>.panel{padding:14px;}.plan-score-row{padding:9px;gap:7px;}
+ .plan-shelf h3{font-size:19px;}.recruiter-scan{padding:13px;}}
+@media(prefers-reduced-motion:reduce){.recruiter-scan,.plan-shelf *{scroll-behavior:auto;}}
